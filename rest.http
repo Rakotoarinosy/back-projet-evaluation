@@ -1,0 +1,50 @@
+GET http://localhost:5000/user/
+
+###
+GET http://localhost:5000/ticket/
+
+###
+POST http://localhost:5000/ticket
+Content-Type: application/json
+
+{
+    "type": "finTicket",
+    "contenu": "Ticket en resolu",
+    "userId": 1
+} 
+
+
+###
+DELETE http://localhost:5000/ticket/6
+
+
+###
+PATCH  http://localhost:5000/ticket/1
+Content-Type: application/json
+
+{
+    "type": "NewNewTicket",
+    "contenu": "Nouveau ticket modifie",
+    "userId": 2
+} 
+
+
+###
+POST http://localhost:5000/user/register
+Content-Type: application/json
+
+{
+    "nom": "randria",
+    "email": "randria@gmail.com",
+    "password": "123456"
+} 
+
+
+###
+POST http://localhost:5000/user/login
+Content-Type: application/json
+
+{
+    "email": "rabe@gmail.com",
+    "password": "123456"
+} 
