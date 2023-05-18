@@ -11,6 +11,8 @@ app.use(morgan('dev'));
 
 const userRouter=require('./routes/user');
 const ticketRouter=require('./routes/ticket');
+const authRouter=require('./routes/auth');
+
 
 app.get('/', async (req, res, next) => {
   res.send({ message: 'Awesome it works 🐻' });
@@ -18,6 +20,8 @@ app.get('/', async (req, res, next) => {
 
 app.use('/user', userRouter);
 app.use('/ticket', ticketRouter);
+app.use('/auth', authRouter);
+
 
 app.use((req, res, next) => {
   next(createError.NotFound());

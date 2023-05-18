@@ -22,12 +22,7 @@ router.get('/:id', user_C.getUser)
 
 router.put('/register', user_C.addUser)
 
-router.post('/login', user_C.login)
 
-
-router.use((req, res, next) => {
-    next(createError.NotFound());
-  });
 
 
 
