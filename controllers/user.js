@@ -20,8 +20,16 @@ exports.getAllUsers = async (req, res, next) => {
 
 exports.getUser = async (req, res, next) => {
     try {
-      const { id } = req.params
-      const user = await prisma.user.findUnique({
+
+      const id = parseInt(req.params.id)
+
+    // Vérification si le champ id est présent et cohérent
+    if (!id) {
+        return res.status(400).json({msg:"missing parameters"});
+    }
+
+
+    const user = await prisma.user.findUnique({
         where: {
           id: Number(id),
           

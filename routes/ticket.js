@@ -13,10 +13,16 @@ router.post('/add', ticket_C.addTicket)
 router.delete('/id', ticket_C.deleteTicket)
 router.patch('/:id', ticket_C.updateTicket)
 
-
-
-  router.use((req, res, next) => {
+router.use((req, res, next) => {
     next(createError.NotFound());
+  });
+
+  router.use((err, req, res, next) => {
+    res.status(err.status || 500);
+    res.send({
+      status: err.status || 500,
+      message: err.message,
+    });
   });
 
 

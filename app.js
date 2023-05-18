@@ -19,7 +19,6 @@ app.get('/', async (req, res, next) => {
 app.use('/user', userRouter);
 app.use('/ticket', ticketRouter);
 
-
 app.use((req, res, next) => {
   next(createError.NotFound());
 });
