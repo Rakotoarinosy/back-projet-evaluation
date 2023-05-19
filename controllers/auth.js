@@ -13,6 +13,7 @@ exports.login = async (req, res, next) => {
   
     try {
 
+      
     // Validation des données reçues
     if (!req.body.email || !req.body.password) {
       throw new AuthenticationError('Mauvais password ou email', 0)

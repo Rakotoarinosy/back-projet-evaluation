@@ -2,14 +2,16 @@ const express = require('express');
 const createError = require('http-errors');
 const morgan = require('morgan');
 require('dotenv').config();
+const cors = require('cors')
 
 const checkTokenMiddleware = require('./jsonwebtoken/check')
 
 
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
+app.use(cors())
 
 
 const userRouter=require('./routes/user');

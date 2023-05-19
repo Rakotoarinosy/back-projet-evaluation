@@ -10,6 +10,7 @@ const prisma = new PrismaClient()
 
 exports.getAllUsers = async (req, res, next) => {
     try{   
+      console.log('eateaf')
       const user = await prisma.user.findMany({
         include:{ticket:true},
       })
