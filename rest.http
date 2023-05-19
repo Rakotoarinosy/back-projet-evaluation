@@ -8,9 +8,9 @@ PUT  http://localhost:5000/user/register
 Content-Type: application/json
 
 {
-    "nom": "randria",
-    "email": "randriaf@gmail.com",
-    "password": "123456"
+    "nom": "randria4",
+    "email": "randriafds@gmail.com",
+    "password": "1234567"
 } 
 
 

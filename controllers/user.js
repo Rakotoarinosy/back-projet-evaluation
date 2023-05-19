@@ -2,6 +2,9 @@
 const bcrypt = require('bcrypt');
 const { PrismaClient } = require('@prisma/client')
 
+const { UserError, RequestError } = require('../error/customError')
+
+
 
 const prisma = new PrismaClient()
 
@@ -25,7 +28,7 @@ exports.getUser = async (req, res, next) => {
 
     // Vérification si le champ id est présent et cohérent
     if (!id) {
-        return res.status(400).json({msg:"missing parameters"});
+      throw new RequestError('Missing parameter')
     }
 
 
@@ -46,21 +49,38 @@ exports.getUser = async (req, res, next) => {
 
 
 exports.addUser = async (req, res, next) => {
-    const salt = await bcrypt.genSalt();
+  
+  try {
+
+    // Validation des données reçues
+    if (!req.body.nom|| !req.body.email || !req.body.password) {
+      throw new RequestError('Missing parameter')
+    }
+  
+  // Vérification si l'utilisateur existe déjà
+  const user = await prisma.user.findMany({ where: { email: req.body.email } })
+
+  if (user.length != 0) {
+      throw new UserError(`L\'utilisateur ${req.body.email} existe deja`, 1)
+   
+  }
+  
+  
+  const salt = await bcrypt.genSalt();
     const hashPassword = await bcrypt.hash(req.body.password,salt);
   
-    const newUser={
+    const dataNewUser={
       nom: req.body.nom,
       email:req.body.email,
       password:hashPassword
     }
   
-    try {
+    
   
-      const user = await prisma.user.create({
-        data:newUser,
+      const newUser = await prisma.user.create({
+        data:dataNewUser,
       })
-      res.json(user)
+      res.json(newUser)
       
     } catch (error) {
       next(error)

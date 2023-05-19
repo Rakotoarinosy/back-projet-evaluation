@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client')
 
+const { TicketError, RequestError } = require('../error/customError')
 
 const prisma = new PrismaClient()
 
@@ -24,7 +25,7 @@ exports.getTicket = async (req, res, next) => {
 
     // Vérification si le champ id est présent et cohérent
     if (!id) {
-        return res.status(400).json({msg:"missing parameters"});
+        throw new RequestError('Missing parameter')
     }
       
     const ticket = await prisma.ticket.findUnique({
@@ -33,6 +34,11 @@ exports.getTicket = async (req, res, next) => {
         },
         include: {user:true},
     })
+
+    // Test si résultat
+    if (ticket === null) {
+      throw new TicketError('Ce ticket n\'existe pas',0)
+  }
       res.json(ticket)
     } catch (error) {
       next(error)

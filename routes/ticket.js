@@ -4,26 +4,30 @@ const router = require('express').Router();
 const { PrismaClient } = require('@prisma/client')
 
 const ticket_C = require('../controllers/ticket')
+const checkTokenMiddleware = require('../jsonwebtoken/check')
+
+
+
+
 const prisma = new PrismaClient()
+
+
+// Middleware recuperation Date du requete
+router.use( (req, res, next) => {
+    const event = new Date()
+    console.log('Ticket Time:', event.toString())
+    next()
+  })
+
 
 
 router.get('/', ticket_C.getAllTickets)
 router.get('/:id', ticket_C.getTicket)
-router.post('/add', ticket_C.addTicket)
-router.delete('/id', ticket_C.deleteTicket)
-router.patch('/:id', ticket_C.updateTicket)
+router.post('/add',checkTokenMiddleware, ticket_C.addTicket)
+router.delete('/id',checkTokenMiddleware, ticket_C.deleteTicket)
+router.patch('/:id',checkTokenMiddleware, ticket_C.updateTicket)
 
-router.use((req, res, next) => {
-    next(createError.NotFound());
-  });
 
-  router.use((err, req, res, next) => {
-    res.status(err.status || 500);
-    res.send({
-      status: err.status || 500,
-      message: err.message,
-    });
-  });
 
 
 module.exports = router;

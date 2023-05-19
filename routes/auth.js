@@ -8,10 +8,10 @@ const { PrismaClient } = require('@prisma/client')
 
 const prisma = new PrismaClient()
 
-//Date du requete
+// Middleware recuperation Date du requete
 router.use( (req, res, next) => {
   const event = new Date()
-  console.log('User Time:', event.toString())
+  console.log('AUTH Time:', event.toString())
   next()
 })
 
