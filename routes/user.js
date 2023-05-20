@@ -25,6 +25,11 @@ router.get('/:id', user_C.getUser)
 
 router.put('/register', user_C.addUser)
 
+router.patch('/edit/:id', user_C.updateUser)
+
+router.post('/userConnected', user_C.getUserConnected)
+
+
 
 
 

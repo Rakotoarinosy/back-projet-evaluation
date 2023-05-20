@@ -13,6 +13,16 @@ Content-Type: application/json
     "password": "1234567"
 } 
 
+###
+PATCH  http://localhost:5000/user/edit/1
+Content-Type: application/json
+
+{
+    "nom": "randria4",
+    "email": "randriafds@gmail.com",
+    "password": "1234567"
+} 
+
 
 ###
 POST http://localhost:5000/auth/login

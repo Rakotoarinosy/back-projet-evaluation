@@ -23,7 +23,7 @@ app.get('/', async (req, res, next) => {
   res.send({ message: 'Awesome it works 🐻' });
 });
 
-app.use('/user',checkTokenMiddleware, userRouter);
+app.use('/user',/*checkTokenMiddleware,*/ userRouter);
 app.use('/ticket', ticketRouter);
 app.use('/auth', authRouter);
 

@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken')
 
 const bcrypt = require('bcrypt');
 const { PrismaClient } = require('@prisma/client')
@@ -10,7 +11,7 @@ const prisma = new PrismaClient()
 
 exports.getAllUsers = async (req, res, next) => {
     try{   
-      console.log('eateaf')
+
       const user = await prisma.user.findMany({
         include:{ticket:true},
       })
@@ -36,13 +37,13 @@ exports.getUser = async (req, res, next) => {
     const user = await prisma.user.findUnique({
         where: {
           id: Number(id),
-          
+
         },
 
       })
       res.json(user)
     } catch (error) {
-      next(error)
+      return res.status(500).json({ message: 'Database Error' })
     }  
   };
 
@@ -50,9 +51,10 @@ exports.getUser = async (req, res, next) => {
 
 
 exports.addUser = async (req, res, next) => {
-  
+
   try {
 
+    
     // Validation des données reçues
     if (!req.body.nom|| !req.body.email || !req.body.password) {
       throw new RequestError('Missing parameter')
@@ -89,4 +91,77 @@ exports.addUser = async (req, res, next) => {
   
   };
   
+
+exports.updateUser = async (req, res, next) => {
+  
+  console.log(req.params.id)
+
+
+  const userId = parseInt(req.params.id)
+  // Vérification si le champ id est présent et cohérent
+  if (!userId) {
+    throw new RequestError('Missing parameter')
+  }
+  
+  try {
+   
+
+    // Validation des données reçues
+    if (!req.body.nom|| !req.body.email ) {
+      throw new RequestError('Missing parameter')
+    }
+
+    // Vérification si l'utilisateur existe déjà
+    const user = await prisma.user.findMany({ where: { id: userId } })
+
+    if (user.length == 0) {
+        throw new UserError(`L\'utilisateur n\'existe pas`, 0)
+    
+    }
+
+    // Mise à jour de l'utilisateur
+ 
+
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        nom:req.body.nom,
+        email:req.body.email,
+      },
+    })
+    return res.json({ message: 'User Updated'})
+    
+  } catch (error) {
+    next(error)
+  }
+}
+
+exports.getUserConnected = async (req, res, next) => {
+
+
+  const token = req.body.token
+  
+
+  try {
+    const decodedToken = jwt.decode(token);
+    
+    if (decodedToken) {
+      const { id, email, nom } = decodedToken;
+      
+      return res.json({
+        id,
+        email,
+        nom,
+      });
+    }
+    
+    // Si le token est invalide ou non décodé, vous pouvez renvoyer une réponse appropriée.
+    return res.status(400).json({ error: 'Invalid token' });
+  } catch (error) {
+    // En cas d'erreur lors du décodage du token, vous pouvez renvoyer une réponse d'erreur.
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
   
