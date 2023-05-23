@@ -53,7 +53,7 @@ GET http://localhost:5000/ticket/
 
 // update statu ticket
 ###
-GET http://localhost:5000/statu/resolu/1
+GET http://localhost:5000/statu/cloturer/2
 
 
 ###

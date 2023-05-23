@@ -6,18 +6,21 @@ const prisma = new PrismaClient()
 
 exports.getAllTickets=async (req, res, next) => {
 
+
+
     const ticket =[]
 
     try{
       const allTicket = await prisma.ticket.findMany({
-        where:{userId:2},
         include:{user:true,userTicket:true},
       })
+
+
       
 
       allTicket.map((allTicket) => {
-        if (item.statuId === 4 || item.statuId ===5)
-        {
+          
+        
           let item = {
             id:allTicket.id,
             type:allTicket.type,
@@ -27,17 +30,58 @@ exports.getAllTickets=async (req, res, next) => {
             statuId:allTicket.userTicket[allTicket.userTicket.length-1].statuId,
             userTicket: allTicket.userTicket[allTicket.userTicket.length-1].id
           };
-          
           ticket.push(item);
-        }
+        
       })
 
-     
       res.json({ticket})
     } catch (error) {
       next(error)
     }
 };
+
+
+exports.getCurrentTickets=async (req, res, next) => {
+
+  console.log('tafiditra ato')
+
+  const ticket =[]
+
+  try{
+    const allTicket = await prisma.ticket.findMany({
+      include:{user:true,userTicket:true},
+    })
+
+
+    
+
+    allTicket.map((allTicket) => {
+        
+      
+        let item = {
+          id:allTicket.id,
+          type:allTicket.type,
+          contenu:allTicket.contenu,
+          createdAt:allTicket.createdAt,
+          userId:allTicket.userId,
+          statuId:allTicket.userTicket[allTicket.userTicket.length-1].statuId,
+          userTicket: allTicket.userTicket[allTicket.userTicket.length-1].id
+        };
+
+
+        if (item.statuId === 4 || item.statuId ===5 || item.statuId ===7)
+      {
+        ticket.push(item);
+      }
+    })
+
+    res.json({ticket})
+  } catch (error) {
+    next(error)
+  }
+};
+
+
 
 
 exports.getTicket = async (req, res, next) => {
