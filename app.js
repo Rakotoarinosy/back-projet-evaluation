@@ -17,6 +17,8 @@ app.use(cors())
 const userRouter=require('./routes/user');
 const ticketRouter=require('./routes/ticket');
 const authRouter=require('./routes/auth');
+const statuRouter=require('./routes/statu');
+
 
 
 app.get('/', async (req, res, next) => {
@@ -26,6 +28,9 @@ app.get('/', async (req, res, next) => {
 app.use('/user',/*checkTokenMiddleware,*/ userRouter);
 app.use('/ticket', ticketRouter);
 app.use('/auth', authRouter);
+app.use('/statu', statuRouter);
+
+
 
 
 app.use((req, res, next) => {

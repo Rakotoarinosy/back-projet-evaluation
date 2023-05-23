@@ -44,5 +44,6 @@ class AuthenticationError extends MainError{}
 class UserError extends MainError{}
 class TicketError extends MainError{}
 class RequestError extends MainError{}
+class StatuError extends MainError{}
 
-module.exports = { MainError, AuthenticationError, UserError, TicketError, RequestError}
+module.exports = { MainError, AuthenticationError, UserError, TicketError, RequestError, StatuError}

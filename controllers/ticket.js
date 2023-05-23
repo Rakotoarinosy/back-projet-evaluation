@@ -5,10 +5,31 @@ const { TicketError, RequestError } = require('../error/customError')
 const prisma = new PrismaClient()
 
 exports.getAllTickets=async (req, res, next) => {
+
+    const ticket =[]
+
     try{
-      const ticket = await prisma.ticket.findMany({
-        include:{user:true},
-        
+      const allTicket = await prisma.ticket.findMany({
+        where:{userId:2},
+        include:{user:true,userTicket:true},
+      })
+      
+
+      allTicket.map((allTicket) => {
+        if (item.statuId === 4 || item.statuId ===5)
+        {
+          let item = {
+            id:allTicket.id,
+            type:allTicket.type,
+            contenu:allTicket.contenu,
+            createdAt:allTicket.createdAt,
+            userId:allTicket.userId,
+            statuId:allTicket.userTicket[allTicket.userTicket.length-1].statuId,
+            userTicket: allTicket.userTicket[allTicket.userTicket.length-1].id
+          };
+          
+          ticket.push(item);
+        }
       })
 
      

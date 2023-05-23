@@ -29,6 +29,9 @@ router.patch('/edit/:id', user_C.updateUser)
 
 router.post('/userConnected', user_C.getUserConnected)
 
+router.post('/userRole', user_C.getUserRole)
+
+
 
 
 

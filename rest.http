@@ -2,15 +2,24 @@
 // USER //
 
 GET http://localhost:5000/user/
+###
+
+POST http://localhost:5000/user/userRole
+Content-Type: application/json
+
+{
+    "type": "randria4",
+    "token": "randriafds@gmail.com",
+} 
 
 ###
 PUT  http://localhost:5000/user/register
 Content-Type: application/json
 
 {
-    "nom": "randria4",
-    "email": "randriafds@gmail.com",
-    "password": "1234567"
+    "nom": "newuserd",
+    "email": "newusergod@gmail.com",
+    "password": "newuser"
 } 
 
 ###
@@ -40,6 +49,12 @@ Content-Type: application/json
 
 ###
 GET http://localhost:5000/ticket/
+
+
+// update statu ticket
+###
+GET http://localhost:5000/statu/resolu/1
+
 
 ###
 POST http://localhost:5000/ticket/add

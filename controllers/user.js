@@ -70,20 +70,45 @@ exports.addUser = async (req, res, next) => {
   
   
   const salt = await bcrypt.genSalt();
-    const hashPassword = await bcrypt.hash(req.body.password,salt);
+  const hashPassword = await bcrypt.hash(req.body.password,salt);
   
-    const dataNewUser={
+  const dataNewUser={
       nom: req.body.nom,
       email:req.body.email,
       password:hashPassword
     }
   
     
-  
-      const newUser = await prisma.user.create({
-        data:dataNewUser,
+  //Ajouter l'utilisateur
+  const newUser = await prisma.user.create({
+       data:dataNewUser,
       })
-      res.json(newUser)
+
+  //ajouter le role
+  const result = await prisma.user.findFirst({
+    select: {
+      id: true,
+    },
+    orderBy: {
+      id: 'desc',
+    },
+  });
+
+  const lastId = result?.id || 0; // Si la table est vide, retourne 0 comme dernière ID
+
+  console.log('Dernier ID :', lastId);
+
+  const newUserRole = {
+      userId: lastId,
+      roleId: 2,
+      statuId: 1
+  }
+
+  const newRole = await prisma.userRole.create({
+    data: newUserRole,
+  })
+
+      res.json(newUserRole)
       
     } catch (error) {
       next(error)
@@ -159,6 +184,48 @@ exports.getUserConnected = async (req, res, next) => {
     
     // Si le token est invalide ou non décodé, vous pouvez renvoyer une réponse appropriée.
     return res.status(400).json({ error: 'Invalid token' });
+  } catch (error) {
+    // En cas d'erreur lors du décodage du token, vous pouvez renvoyer une réponse d'erreur.
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+exports.getUserRole = async (req, res, next) => {
+
+  const token = req.body.token
+  
+
+  try {
+    const decodedToken = jwt.decode(token);
+    
+    
+    if (!decodedToken) {
+
+    // Si le token est invalide ou non décodé, vous pouvez renvoyer une réponse appropriée.
+    return res.status(400).json({ error: 'Invalid token' });
+
+    }
+
+    const { id, email, nom } = decodedToken;
+      console.log(id)
+      
+      const userRole = await prisma.userRole.findMany({
+        where: {
+          userId: Number(id),
+        },
+
+      })
+
+      if (userRole.length == 0) {
+        throw new UserError(`L\'utilisateur n\'existe pas`, 0)
+    
+      }
+
+
+      return res.json(userRole[userRole.length-1])
+    
+    
   } catch (error) {
     // En cas d'erreur lors du décodage du token, vous pouvez renvoyer une réponse d'erreur.
     return res.status(500).json({ error: 'Internal server error' });
