@@ -43,7 +43,6 @@ exports.getAllTickets=async (req, res, next) => {
 
 exports.getCurrentTickets=async (req, res, next) => {
 
-  console.log('tafiditra ato')
 
   const ticket =[]
 

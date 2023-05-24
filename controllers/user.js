@@ -208,7 +208,7 @@ exports.getUserRole = async (req, res, next) => {
 
     }
 
-    const { id, email, nom } = decodedToken;
+    const { id } = decodedToken;
       
       const userRole = await prisma.userRole.findMany({
         where: {
