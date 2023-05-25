@@ -18,7 +18,7 @@ Content-Type: application/json
 
 {
     "nom": "newuserd",
-    "email": "newusergod@gmail.com",
+    "email": "newTest@gmail.com",
     "password": "newuser"
 } 
 
@@ -57,11 +57,11 @@ GET http://localhost:5000/statu/cloturer/2
 
 
 ###
-POST http://localhost:5000/ticket/add
+PUT http://localhost:5000/ticket/add
 Content-Type: application/json
 
 {
-    "type": "finTicket",
+    "titre": "finTicket",
     "contenu": "Ticket en resolu",
     "userId": 1
 } 

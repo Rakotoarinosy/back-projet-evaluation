@@ -84,7 +84,7 @@ exports.addUser = async (req, res, next) => {
        data:dataNewUser,
       })
 
-  //ajouter le role
+  //Prendre l'id de l'user ajouter
   const result = await prisma.user.findFirst({
     select: {
       id: true,
@@ -96,15 +96,14 @@ exports.addUser = async (req, res, next) => {
 
   const lastId = result?.id || 0; // Si la table est vide, retourne 0 comme dernière ID
 
-  console.log('Dernier ID :', lastId);
-
+  //Ajouter Role
   const newUserRole = {
       userId: lastId,
       roleId: 2,
       statuId: 1
   }
 
-  const newRole = await prisma.userRole.create({
+  const newRole = await prisma.statu_user_role.create({
     data: newUserRole,
   })
 
@@ -145,7 +144,7 @@ exports.updateUser = async (req, res, next) => {
     }
 
     // Mise à jour de l'utilisateur
- 
+    
 
     await prisma.user.update({
       where: {
@@ -210,7 +209,7 @@ exports.getUserRole = async (req, res, next) => {
 
     const { id } = decodedToken;
       
-      const userRole = await prisma.userRole.findMany({
+      const userRole = await prisma.statu_user_role.findMany({
         where: {
           userId: Number(id),
         },

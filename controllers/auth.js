@@ -44,11 +44,30 @@ exports.login = async (req, res, next) => {
             nom: user[0].nom,
             email: user[0].email
         }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_DURING})
-
-
-     
         
-        return res.json({access_token: token})
+
+        //recuperation du role de l'utilisateur
+
+        const userRole = await prisma.statu_user_role.findMany({
+          where: {
+            userId: Number(user[0].id),
+          },
+  
+        })
+  
+        if (userRole.length == 0) {
+          throw new UserError(`L\'utilisateur n\'existe pas`, 0)
+        }
+        
+        const role=userRole[0].roleId
+        
+        return res.json({
+          access_token: token,
+          id: user[0].id,
+          nom: user[0].nom,
+          email: user[0].nom,
+          role: role,
+        })
       
       
     } catch (error) {

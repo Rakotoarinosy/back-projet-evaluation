@@ -24,9 +24,11 @@ router.use( (req, res, next) => {
 router.get('/', ticket_C.getAllTickets)
 router.get('/current',ticket_C.getCurrentTickets)
 router.get('/:id', ticket_C.getTicket)
-router.post('/add',checkTokenMiddleware, ticket_C.addTicket)
+router.put('/add',/*checkTokenMiddleware,*/ ticket_C.addTicket)
 router.delete('/id',checkTokenMiddleware, ticket_C.deleteTicket)
 router.patch('/:id',checkTokenMiddleware, ticket_C.updateTicket)
+router.get('/myTickets/:id', ticket_C.getMyTickets)
+
 
 
 

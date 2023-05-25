@@ -6,29 +6,28 @@ const prisma = new PrismaClient()
 
 exports.getAllTickets=async (req, res, next) => {
 
-
-
     const ticket =[]
 
     try{
       const allTicket = await prisma.ticket.findMany({
-        include:{user:true,userTicket:true},
+        include:{user:true,statu_user_ticket:true},
+        orderBy: {
+          id: 'desc',
+        },
       })
-
-
-      
 
       allTicket.map((allTicket) => {
           
-        
+                
           let item = {
             id:allTicket.id,
-            type:allTicket.type,
+            titre:allTicket.titre,
             contenu:allTicket.contenu,
             createdAt:allTicket.createdAt,
             userId:allTicket.userId,
-            statuId:allTicket.userTicket[allTicket.userTicket.length-1].statuId,
-            userTicket: allTicket.userTicket[allTicket.userTicket.length-1].id
+            userNom: allTicket.user.nom,
+            statuId:allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].statuId,
+            statu_user_ticket: allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].id
           };
           ticket.push(item);
         
@@ -41,30 +40,88 @@ exports.getAllTickets=async (req, res, next) => {
 };
 
 
-exports.getCurrentTickets=async (req, res, next) => {
+exports.getMyTickets=async (req, res, next) => {
 
-
+  
   const ticket =[]
 
   try{
+
+    const id = parseInt(req.params.id)
+
+    // Vérification si le champ id est présent et cohérent
+    if (!id) {
+        throw new RequestError('Missing parameter')
+    }
+
+
     const allTicket = await prisma.ticket.findMany({
-      include:{user:true,userTicket:true},
-    })
+      where: {
+        userId: Number(id),      
+      },
+      include:{user:true,statu_user_ticket:true},
+      orderBy: {
+        id: 'desc',
+      },
+    })    
 
-
-    
 
     allTicket.map((allTicket) => {
         
       
         let item = {
           id:allTicket.id,
-          type:allTicket.type,
+          titre:allTicket.titre,
           contenu:allTicket.contenu,
           createdAt:allTicket.createdAt,
           userId:allTicket.userId,
-          statuId:allTicket.userTicket[allTicket.userTicket.length-1].statuId,
-          userTicket: allTicket.userTicket[allTicket.userTicket.length-1].id
+          statuId:allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].statuId,
+          statu_user_ticket: allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].id
+        };
+        ticket.push(item);
+      
+    })
+
+    res.json({ticket})
+  } catch (error) {
+    next(error)
+  }
+};
+
+
+
+
+
+
+exports.getCurrentTickets=async (req, res, next) => {
+
+
+  const ticket =[]
+
+  try{
+
+  
+    const allTicket = await prisma.ticket.findMany({
+      include:{user:true,statu_user_ticket:true},
+      orderBy: {
+        id: 'desc',
+      },
+
+    })
+
+
+    allTicket.map((allTicket) => {
+        
+      
+        let item = {
+          id:allTicket.id,
+          titre:allTicket.titre,
+          contenu:allTicket.contenu,
+          createdAt:allTicket.createdAt,
+          userId:allTicket.userId,
+          userNom: allTicket.user.nom,
+          statuId:allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].statuId,
+          statu_user_ticket: allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].id
         };
 
 
@@ -113,9 +170,46 @@ exports.getTicket = async (req, res, next) => {
 
 exports.addTicket = async (req, res, next) => {
     try {
+      
+
+      const newTicket = {
+        titre: req.body.titre,
+        contenu: req.body.contenu,
+        userId: req.body.userId
+      }
+
+      console.log(newTicket)
+
+      //Ajouter le ticket 
+
       const ticket = await prisma.ticket.create({
-        data: req.body,
+        data: newTicket,
       })
+      
+    
+      //Prendre l'id du ticket ajouter
+      const idTicket = await prisma.ticket.findFirst({
+        select: {
+          id: true,
+        },
+        orderBy: {
+          id: 'desc',
+        },
+      });
+
+      const lastId = idTicket?.id || 0; // Si la table est vide, retourne 0 comme dernière ID
+
+      //Ajouter status
+      const newStatu_user_ticket = {
+        userId: ticket.userId,
+        ticketId: lastId,
+        statuId: 4
+    }
+
+    const newRole = await prisma.statu_user_ticket.create({
+      data: newStatu_user_ticket,
+    })
+
       res.json(ticket)
       
     } catch (error) {

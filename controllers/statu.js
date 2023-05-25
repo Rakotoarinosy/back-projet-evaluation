@@ -23,7 +23,7 @@ exports.supprimer = async (req, res, next) => {
         return res.status(400).json({msg:"missing parameters"});
     }
 
-    const last_statu_ticket = await prisma.userTicket.findUnique({
+    const last_statu_ticket = await prisma.statu_user_ticket.findUnique({
       where: {
         id: Number(id),      
       },
@@ -36,10 +36,10 @@ exports.supprimer = async (req, res, next) => {
 
     }
 
-    const userTicket = await prisma.userTicket.create({
+    const statu_user_ticket = await prisma.statu_user_ticket.create({
       data: new_statu_ticket,
     })
-    res.json(userTicket)
+    res.json(statu_user_ticket)
       
     } catch (error) {
       next(error)
@@ -55,7 +55,7 @@ exports.supprimer = async (req, res, next) => {
         return res.status(400).json({msg:"missing parameters"});
     }
 
-    const last_statu_ticket = await prisma.userTicket.findUnique({
+    const last_statu_ticket = await prisma.statu_user_ticket.findUnique({
       where: {
         id: Number(id),      
       },
@@ -68,10 +68,10 @@ exports.supprimer = async (req, res, next) => {
 
     }
 
-    const userTicket = await prisma.userTicket.create({
+    const statu_user_ticket = await prisma.statu_user_ticket.create({
       data: new_statu_ticket,
     })
-    res.json(userTicket)
+    res.json(statu_user_ticket)
       
     } catch (error) {
       next(error)
@@ -88,7 +88,7 @@ exports.supprimer = async (req, res, next) => {
         return res.status(400).json({msg:"missing parameters"});
     }
 
-    const last_statu_ticket = await prisma.userTicket.findUnique({
+    const last_statu_ticket = await prisma.statu_user_ticket.findUnique({
       where: {
         id: Number(id),      
       },
@@ -101,10 +101,10 @@ exports.supprimer = async (req, res, next) => {
 
     }
 
-    const userTicket = await prisma.userTicket.create({
+    const statu_user_ticket = await prisma.statu_user_ticket.create({
       data: new_statu_ticket,
     })
-    res.json(userTicket)
+    res.json(statu_user_ticket)
       
     } catch (error) {
       next(error)
@@ -121,7 +121,7 @@ exports.supprimer = async (req, res, next) => {
         return res.status(400).json({msg:"missing parameters"});
     }
 
-    const last_statu_ticket = await prisma.userTicket.findUnique({
+    const last_statu_ticket = await prisma.statu_user_ticket.findUnique({
       where: {
         id: Number(id),      
       },
@@ -134,10 +134,10 @@ exports.supprimer = async (req, res, next) => {
 
     }
 
-    const userTicket = await prisma.userTicket.create({
+    const statu_user_ticket = await prisma.statu_user_ticket.create({
       data: new_statu_ticket,
     })
-    res.json(userTicket)
+    res.json(statu_user_ticket)
       
     } catch (error) {
       next(error)

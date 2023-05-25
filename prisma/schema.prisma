@@ -14,12 +14,12 @@ datasource db {
 
 model Ticket{
   id                Int       @id @default(autoincrement())
-  type              String
+  titre             String    @default("Aucun titre")
   contenu           String
   createdAt         DateTime  @default(now())
   user              User      @relation(fields: [userId], references: [id])
   userId            Int
-  userTicket         UserTicket[]
+  statu_user_ticket         Statu_user_ticket[]
 
 }
 
@@ -29,26 +29,26 @@ model User{
   email             String
   password          String
   ticket            Ticket[]
-  userRole          UserRole[]
-  userTicket         UserTicket[]
+  statu_user_role          Statu_user_role[]
+  statu_user_ticket         Statu_user_ticket[]
 
 }
 
 model Role{
   id                Int       @id @default(autoincrement())
   nom               String
-  userRole          UserRole[]
+  statu_user_role          Statu_user_role[]
 }
 
 model Statu{
   st_id             Int       @id @default(autoincrement())
   st_libelle        String
-  role              UserRole[]    
-  userTicket         UserTicket[]
+  role              Statu_user_role[]    
+  statu_user_ticket         Statu_user_ticket[]
 
 }
 
-model UserRole {
+model Statu_user_role {
   id                Int       @id @default(autoincrement())
   userId            Int
   roleId            Int
@@ -61,11 +61,12 @@ model UserRole {
 }
 
 
-model UserTicket {
+model Statu_user_ticket {
   id                Int        @id @default(autoincrement())
   userId            Int
   ticketId          Int
   statuId           Int
+  date              DateTime  @default(now())
   user              User      @relation(fields: [userId], references: [id])
   Ticket            Ticket    @relation(fields: [ticketId], references: [id])
   Statu             Statu     @relation(fields: [statuId], references: [st_id])
