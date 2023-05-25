@@ -4,6 +4,16 @@ const { TicketError, RequestError } = require('../error/customError')
 
 const prisma = new PrismaClient()
 
+
+const dateFormat= (date) =>{
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  const strDate = `${day}/${month}/${year}`;
+  return strDate
+
+}
+
 exports.getAllTickets=async (req, res, next) => {
 
     const ticket =[]
@@ -23,7 +33,7 @@ exports.getAllTickets=async (req, res, next) => {
             id:allTicket.id,
             titre:allTicket.titre,
             contenu:allTicket.contenu,
-            createdAt:allTicket.createdAt,
+            createdAt:dateFormat(allTicket.createdAt),
             userId:allTicket.userId,
             userNom: allTicket.user.nom,
             statuId:allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].statuId,
@@ -73,7 +83,7 @@ exports.getMyTickets=async (req, res, next) => {
           id:allTicket.id,
           titre:allTicket.titre,
           contenu:allTicket.contenu,
-          createdAt:allTicket.createdAt,
+          createdAt:dateFormat(allTicket.createdAt),
           userId:allTicket.userId,
           statuId:allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].statuId,
           statu_user_ticket: allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].id
@@ -117,7 +127,7 @@ exports.getCurrentTickets=async (req, res, next) => {
           id:allTicket.id,
           titre:allTicket.titre,
           contenu:allTicket.contenu,
-          createdAt:allTicket.createdAt,
+          createdAt:dateFormat(allTicket.createdAt),
           userId:allTicket.userId,
           userNom: allTicket.user.nom,
           statuId:allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].statuId,
