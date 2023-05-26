@@ -7,8 +7,6 @@ const ticket_C = require('../controllers/ticket')
 const checkTokenMiddleware = require('../jsonwebtoken/check')
 
 
-
-
 const prisma = new PrismaClient()
 
 
