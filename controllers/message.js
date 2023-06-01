@@ -94,12 +94,23 @@ exports.getMessage=async (req, res, next) => {
           id: allMessageItem.Message.senderId
         }
       })
+
+      // prendre le receiver Id
+      let receiverId;
+
+      for (let i = 0; i < allMessageItem.Conversation.membre.length; i++) {
+        if (allMessageItem.Conversation.membre[i] !== allMessageItem.Message.senderId) {
+          receiverId = allMessageItem.Conversation.membre[i];
+          break;
+        }
+      }
       
       let item = {
         id:allMessageItem.id,
         messageId:allMessageItem.messageId,
-        senderId:allMessageItem.Message.senderId,
         senderNom: user.nom,
+        senderId:allMessageItem.Message.senderId,
+        receiverId:receiverId,
         message:allMessageItem.Message.message,
         date:dateFormat(allMessageItem.date)
       };
@@ -107,6 +118,7 @@ exports.getMessage=async (req, res, next) => {
     
   }
   
+    //retourner allMessage pour plus de comprehension
     res.json(message)
   } catch (error) {
     next(error)

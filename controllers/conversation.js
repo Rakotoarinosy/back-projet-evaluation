@@ -1,6 +1,6 @@
 const { PrismaClient } = require('@prisma/client')
 
-const { TicketError, RequestError } = require('../error/customError')
+const { RequestError } = require('../error/customError')
 
 const prisma = new PrismaClient()
 
@@ -112,7 +112,8 @@ exports.getConversation=async (req, res, next) => {
         ticketTitre:allConversationItem.Ticket.titre,
         ticketContenu:allConversationItem.Ticket.contenu,
         statuId: allConversationItem.Ticket.statuId,
-        userNom: user.nom,
+        receiverNom: user.nom,
+        receiverId:user.id,
         conversationId: allConversationItem.Conversation.id
         
       };
