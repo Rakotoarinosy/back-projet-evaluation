@@ -55,8 +55,6 @@ exports.newConversation = async (req, res, next) => {
         data: newStatu_conversation_ticket
       })
       
-
-      
       res.json(newStatuConversation)
       
     } catch (error) {
@@ -101,12 +99,26 @@ exports.getConversation=async (req, res, next) => {
 
     for (const allConversationItem of allConversation) {
         
+      
+
+
+      // prendre le receiver Id
+      let receiverId;
+
+      for (let i = 0; i < allConversationItem.Conversation.membre.length; i++) {
+        if (allConversationItem.Conversation.membre[i] !== userConnectId) {
+          receiverId = allConversationItem.Conversation.membre[i];
+          break;
+        }
+      }
+
       const user= await prisma.user.findUnique({
         where: {
-          id: allConversationItem.Ticket.userId
+          id: receiverId
         }
       })
-      
+           
+
       let item = {
         id:allConversationItem.id,
         ticketTitre:allConversationItem.Ticket.titre,
@@ -114,14 +126,11 @@ exports.getConversation=async (req, res, next) => {
         statuId: allConversationItem.Ticket.statuId,
         receiverNom: user.nom,
         receiverId:user.id,
-        conversationId: allConversationItem.Conversation.id
-        
+        conversationId: allConversationItem.Conversation.id        
       };
       conversation.push(item);
     
   }
-
-    
 
     res.json({conversation})
   } catch (error) {
