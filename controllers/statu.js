@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client')
-const { StatuError, RequestError } = require('../error/customError')
+const { StatuError, RequestError } = require('../error/customError');
+const { updateTicket } = require('./ticket');
 const prisma = new PrismaClient()
 
 
@@ -33,18 +34,45 @@ exports.supprimer = async (req, res, next) => {
       userId:last_statu_ticket.userId,
       ticketId:last_statu_ticket.ticketId,
       statuId: statu.deleted
-
     }
 
     const statu_user_ticket = await prisma.statu_user_ticket.create({
       data: new_statu_ticket,
     })
+
+
+    //Modifier le status dans le ticket
+
+    const lastSchemaTicket = await prisma.ticket.findUnique({
+      where:{
+        id:last_statu_ticket.ticketId
+      }
+    })
+
+    const updateTicket = {
+      "type": lastSchemaTicket.type,
+      "contenu": lastSchemaTicket.contenu,
+      "userId": lastSchemaTicket.userId,
+      "statuId":statu.deleted
+  } 
+
+    const ticket = await prisma.ticket.update({
+      data: updateTicket,
+      where:{
+        id: last_statu_ticket.ticketId
+      }
+    })
+
+
     res.json(statu_user_ticket)
       
     } catch (error) {
       next(error)
     } 
   };
+
+
+
 
   exports.cloturer = async (req, res, next) => {
     try {
@@ -71,6 +99,31 @@ exports.supprimer = async (req, res, next) => {
     const statu_user_ticket = await prisma.statu_user_ticket.create({
       data: new_statu_ticket,
     })
+
+
+    //Modifier le status dans le ticket
+
+    const lastSchemaTicket = await prisma.ticket.findUnique({
+      where:{
+        id:last_statu_ticket.ticketId
+      }
+    })
+
+    const updateTicket = {
+      "type": lastSchemaTicket.type,
+      "contenu": lastSchemaTicket.contenu,
+      "userId": lastSchemaTicket.userId,
+      "statuId":statu.resolu
+  } 
+
+    const ticket = await prisma.ticket.update({
+      data: updateTicket,
+      where:{
+        id: last_statu_ticket.ticketId
+      }
+    })
+
+
     res.json(statu_user_ticket)
       
     } catch (error) {
@@ -104,6 +157,30 @@ exports.supprimer = async (req, res, next) => {
     const statu_user_ticket = await prisma.statu_user_ticket.create({
       data: new_statu_ticket,
     })
+
+    //Modifier le status dans le ticket
+
+    const lastSchemaTicket = await prisma.ticket.findUnique({
+      where:{
+        id:last_statu_ticket.ticketId
+      }
+    })
+
+    const updateTicket = {
+      "type": lastSchemaTicket.type,
+      "contenu": lastSchemaTicket.contenu,
+      "userId": lastSchemaTicket.userId,
+      "statuId":statu.enCours
+  } 
+
+    const ticket = await prisma.ticket.update({
+      data: updateTicket,
+      where:{
+        id: last_statu_ticket.ticketId
+      }
+    })
+
+
     res.json(statu_user_ticket)
       
     } catch (error) {
@@ -137,6 +214,30 @@ exports.supprimer = async (req, res, next) => {
     const statu_user_ticket = await prisma.statu_user_ticket.create({
       data: new_statu_ticket,
     })
+
+    //Modifier le status dans le ticket
+
+    const lastSchemaTicket = await prisma.ticket.findUnique({
+      where:{
+        id:last_statu_ticket.ticketId
+      }
+    })
+
+    const updateTicket = {
+      "type": lastSchemaTicket.type,
+      "contenu": lastSchemaTicket.contenu,
+      "userId": lastSchemaTicket.userId,
+      "statuId":statu.enAttente
+  } 
+
+    const ticket = await prisma.ticket.update({
+      data: updateTicket,
+      where:{
+        id: last_statu_ticket.ticketId
+      }
+    })
+
+
     res.json(statu_user_ticket)
       
     } catch (error) {

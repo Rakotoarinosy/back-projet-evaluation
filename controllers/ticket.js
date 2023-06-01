@@ -100,9 +100,6 @@ exports.getMyTickets=async (req, res, next) => {
 
 
 
-
-
-
 exports.getCurrentTickets=async (req, res, next) => {
 
 
@@ -140,6 +137,8 @@ exports.getCurrentTickets=async (req, res, next) => {
         ticket.push(item);
       }
     })
+
+
 
     res.json({ticket})
   } catch (error) {
@@ -185,7 +184,8 @@ exports.addTicket = async (req, res, next) => {
       const newTicket = {
         titre: req.body.titre,
         contenu: req.body.contenu,
-        userId: req.body.userId
+        userId: req.body.userId,
+        statuId: 4
       }
 
       console.log(newTicket)

@@ -61,7 +61,7 @@ PUT http://localhost:5000/ticket/add
 Content-Type: application/json
 
 {
-    "titre": "finTicket",
+    "titre": "testSuppression",
     "contenu": "Ticket en resolu",
     "userId": 1
 } 
@@ -82,3 +82,40 @@ Content-Type: application/json
 } 
 
 
+
+
+//Conversation
+
+###
+PUT  http://localhost:5000/conversation/new
+Content-Type: application/json
+
+{
+    "user": 12,
+    "admin": 4,
+    "ticketId": 45
+} 
+
+###
+GET http://localhost:5000/conversation/4
+
+
+// SATUS
+###
+GET http://localhost:5000/statu/supprimer/180
+
+
+
+// Message
+###
+PUT  http://localhost:5000/message/new
+Content-Type: application/json
+
+{
+    "senderId": 22,
+    "message": "nouveau message du client",
+    "conversationId": 14
+} 
+
+###
+GET http://localhost:5000/message/13

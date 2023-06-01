@@ -17,10 +17,13 @@ model Ticket{
   titre             String    @default("Aucun titre")
   contenu           String
   createdAt         DateTime  @default(now())
-  user              User      @relation(fields: [userId], references: [id])
   userId            Int
+  statuId           Int       @default(4)
+  user              User      @relation(fields: [userId], references: [id])
+  statu             Statu     @relation(fields: [statuId], references: [st_id])
   statu_user_ticket         Statu_user_ticket[]
-
+  statu_conversation_ticket      Statu_conversation_ticket[]
+  
 }
 
 model User{
@@ -31,6 +34,7 @@ model User{
   ticket            Ticket[]
   statu_user_role          Statu_user_role[]
   statu_user_ticket         Statu_user_ticket[]
+
 
 }
 
@@ -43,8 +47,12 @@ model Role{
 model Statu{
   st_id             Int       @id @default(autoincrement())
   st_libelle        String
-  role              Statu_user_role[]    
+  role              Statu_user_role[]  
+  ticket             Ticket[]  
   statu_user_ticket         Statu_user_ticket[]
+  statu_conversation_ticket      Statu_conversation_ticket[]
+  statu_message_conversation     Statu_message_conversation[]
+
 
 }
 
@@ -73,3 +81,42 @@ model Statu_user_ticket {
 }
 
 
+model Conversation{
+  id                Int       @id @default(autoincrement())
+  membre              Int[]
+  statu_conversation_ticket      Statu_conversation_ticket[]
+  statu_message_conversation     Statu_message_conversation[]
+
+}
+
+model Statu_conversation_ticket{
+  id                Int       @id @default(autoincrement())
+  statuId           Int
+  ticketId          Int
+  conversationId    Int
+  date              DateTime  @default(now())
+  Statu             Statu     @relation(fields: [statuId], references: [st_id])
+  Ticket            Ticket    @relation(fields: [ticketId], references: [id])
+  Conversation      Conversation    @relation(fields: [conversationId], references: [id])
+
+}
+
+model Message {
+  id                Int       @id @default(autoincrement())
+  senderId          Int
+  message           String
+  statu_message_conversation     Statu_message_conversation[]
+
+}
+
+
+model Statu_message_conversation{
+  id                Int       @id @default(autoincrement())
+  statuId           Int
+  messageId         Int
+  conversationId    Int
+  date              DateTime  @default(now())
+  Statu             Statu     @relation(fields: [statuId], references: [st_id])
+  Message            Message    @relation(fields: [messageId], references: [id])
+  Conversation      Conversation    @relation(fields: [conversationId], references: [id])
+}

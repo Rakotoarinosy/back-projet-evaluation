@@ -18,6 +18,8 @@ const userRouter=require('./routes/user');
 const ticketRouter=require('./routes/ticket');
 const authRouter=require('./routes/auth');
 const statuRouter=require('./routes/statu');
+const conversationRouter=require('./routes/conversation');
+const messageRouter = require('./routes/message')
 
 
 
@@ -29,7 +31,8 @@ app.use('/user',/*checkTokenMiddleware,*/ userRouter);
 app.use('/ticket', ticketRouter);
 app.use('/auth', authRouter);
 app.use('/statu', statuRouter);
-
+app.use('/conversation',conversationRouter);
+app.use('/message',messageRouter);
 
 
 
