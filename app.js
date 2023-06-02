@@ -31,12 +31,14 @@ const messageRouter = require('./routes/message')
 let users=[];
 io.on('connection', socket => {
   console.log('User connected', socket.id);
+  
   socket.on('addUser', userId => {
       const isUserExist = users.find(user => user.userId === userId);
       if (!isUserExist) {
-          const user = { userId, socketId: socket.id };
+          const user = { userId: userId, socketId: socket.id };
           users.push(user);
-          io.emit('getUsers', users);
+          io.emit('getUsers', users)
+          console.log(users);
       }
   });
 
