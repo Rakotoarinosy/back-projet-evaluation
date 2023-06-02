@@ -117,6 +117,18 @@ exports.getConversation=async (req, res, next) => {
           id: receiverId
         }
       })
+
+
+      //prendre le status du ticket dans statu_user_ticket
+
+
+      const allTicket = await prisma.ticket.findUnique({
+      include:{user:true,statu_user_ticket:true},
+      where:{
+        id:allConversationItem.Ticket.id
+      }
+
+    })
            
 
       let item = {
@@ -124,6 +136,7 @@ exports.getConversation=async (req, res, next) => {
         ticketTitre:allConversationItem.Ticket.titre,
         ticketContenu:allConversationItem.Ticket.contenu,
         statuId: allConversationItem.Ticket.statuId,
+        statu_user_ticket:allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].id,
         receiverNom: user.nom,
         receiverId:user.id,
         conversationId: allConversationItem.Conversation.id        

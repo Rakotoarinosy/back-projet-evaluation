@@ -28,25 +28,33 @@ const messageRouter = require('./routes/message')
 
 
 //Socket
-let users=[];
+let users = [];
+
 io.on('connection', socket => {
   console.log('User connected', socket.id);
   
-  socket.on('addUser', userId => {
-      const isUserExist = users.find(user => user.userId === userId);
-      if (!isUserExist) {
-          const user = { userId: userId, socketId: socket.id };
-          users.push(user);
-          io.emit('getUsers', users)
-          console.log(users);
-      }
+  socket.on('addUser', ({ data }) => {
+    console.log('addUser');
+    const userIndex = users.findIndex(user => user.userId === data.userId);
+    
+    if (userIndex === -1) {
+      const newUser = { userId: data.userId, userRole: data.userRole, socketId: socket.id };
+      users.push(newUser);
+    } else {
+      users[userIndex].socketId = socket.id; // Mettre à jour l'ID du socket existant pour l'utilisateur
+    }
+
+    io.emit('getUsers', users);
+    console.log(users);
   });
 
+
   socket.on('sendMessage', async ({ newMessage }) => {
+    console.log('new message >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+ newMessage)
       const receiver = users.find(user => user.userId === newMessage.receiverId);
       const sender = users.find(user => user.userId === newMessage.senderId);
       // const user = await Users.findById(senderId);
-      console.log('sender :>> ', sender, receiver);
+    
       if (receiver) {
           io.to(receiver.socketId).to(sender.socketId).emit('getMessage', 
               newMessage
@@ -57,6 +65,18 @@ io.on('connection', socket => {
               );
           }
       });
+
+  socket.on('sendNotification', notification =>{   
+    for (let i = 0; i < users.length; i++) {
+      let user = users[i];
+      if (user.userRole === 1){
+        io.to(user.socketId).emit('getNotification', 
+        notification
+    );
+      }
+    }
+
+  })
 
   socket.on('disconnect', () => {
       users = users.filter(user => user.socketId !== socket.id);
