@@ -13,7 +13,7 @@ exports.getAllUsers = async (req, res, next) => {
     try{   
 
       const user = await prisma.user.findMany({
-        include:{ticket:true},
+        include:{ticket:true, statu_user_role:true},
       })
         
       res.json({user})
@@ -228,6 +228,42 @@ exports.getUserRole = async (req, res, next) => {
   } catch (error) {
     // En cas d'erreur lors du décodage du token, vous pouvez renvoyer une réponse d'erreur.
     return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+exports.getUserAdmin = async (req, res, next) => {
+
+  const userAdmin =[]
+  try{   
+
+    const allUser = await prisma.user.findMany({
+      include:{statu_user_role:true},
+    })
+
+    allUser.map((allUser) => {
+
+
+      if(allUser.statu_user_role.length !== 0){
+        const lastId=allUser.statu_user_role.length-1
+
+        if(allUser.statu_user_role[lastId].roleId === 1){
+
+          let item = {
+            adminId: allUser.id,
+            adminNom: allUser.nom
+          }
+  
+          userAdmin.push(item)
+        }
+      }
+      
+     
+    })
+      
+    res.json({userAdmin})
+  } catch (error) {
+    next(error)
   }
 };
   

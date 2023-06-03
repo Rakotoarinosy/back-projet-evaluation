@@ -1,8 +1,7 @@
 
 // USER //
 
-GET http://localhost:5000/user/
-###
+GET http://localhost:5000/user/userAdmin
 
 POST http://localhost:5000/user/userRole
 Content-Type: application/json

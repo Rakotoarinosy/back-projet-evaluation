@@ -21,7 +21,11 @@ router.use( (req, res, next) => {
 
 router.get('/', user_C.getAllUsers)
 
+router.get('/userAdmin', user_C.getUserAdmin)
+
 router.get('/:id', user_C.getUser)
+
+
 
 router.put('/register', user_C.addUser)
 
@@ -30,6 +34,8 @@ router.patch('/edit/:id', user_C.updateUser)
 router.post('/userConnected', user_C.getUserConnected)
 
 router.post('/userRole', user_C.getUserRole)
+
+
 
 
 
