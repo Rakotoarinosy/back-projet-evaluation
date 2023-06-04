@@ -246,12 +246,14 @@ exports.getUserAdmin = async (req, res, next) => {
 
       if(allUser.statu_user_role.length !== 0){
         const lastId=allUser.statu_user_role.length-1
+        const statuUser = allUser.statu_user_role[lastId].roleId
 
-        if(allUser.statu_user_role[lastId].roleId === 1){
+        if( statuUser !== 2){
 
           let item = {
             adminId: allUser.id,
-            adminNom: allUser.nom
+            adminNom: allUser.nom,
+            adminRole: statuUser
           }
   
           userAdmin.push(item)

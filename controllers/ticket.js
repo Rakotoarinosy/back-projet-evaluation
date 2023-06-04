@@ -109,7 +109,7 @@ exports.getCurrentTickets=async (req, res, next) => {
 
   
     const allTicket = await prisma.ticket.findMany({
-      include:{user:true,statu_user_ticket:true},
+      include:{user:true,statu_user_ticket:true, statu_conversation_ticket:true},
       orderBy: {
         id: 'desc',
       },
@@ -118,8 +118,13 @@ exports.getCurrentTickets=async (req, res, next) => {
 
 
     allTicket.map((allTicket) => {
-        
+
       
+
+      if(allTicket.statu_conversation_ticket.length > 0){
+            console.log(allTicket.statu_conversation_ticket.length)
+      
+        
         let item = {
           id:allTicket.id,
           titre:allTicket.titre,
@@ -128,7 +133,8 @@ exports.getCurrentTickets=async (req, res, next) => {
           userId:allTicket.userId,
           userNom: allTicket.user.nom,
           statuId:allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].statuId,
-          statu_user_ticket: allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].id
+          statu_user_ticket: allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].id,
+          conversationId: allTicket.statu_conversation_ticket[allTicket.statu_conversation_ticket.length-1].id
         };
 
 
@@ -136,6 +142,7 @@ exports.getCurrentTickets=async (req, res, next) => {
       {
         ticket.push(item);
       }
+    }
     })
 
 

@@ -47,7 +47,7 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:5000/ticket/
+GET http://localhost:5000/ticket/current
 
 
 // update statu ticket
