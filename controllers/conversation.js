@@ -54,6 +54,26 @@ exports.newConversation = async (req, res, next) => {
       const newStatuConversation = await prisma.statu_conversation_ticket.create({
         data: newStatu_conversation_ticket
       })
+
+
+      //MEttre a jour le ticket
+      const user={}
+      const allUser = await prisma.user.findMany({})
+
+      allUser.map((allUser) => {
+      user[allUser.id]= allUser.nom
+    })
+
+    console.log()
+
+    const updatedTicket = await prisma.ticket.update({
+      where: {
+        id: Number(req.body.ticketId)
+      },
+      data: {
+        adminId: user[req.body.admin]
+      }
+    });
       
       res.json(newStatuConversation)
       
