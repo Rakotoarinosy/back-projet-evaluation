@@ -35,6 +35,7 @@ model User{
   ticket            Ticket[]                           
   statu_user_role          Statu_user_role[]
   statu_user_ticket         Statu_user_ticket[]
+  statu_user_notification   Statu_user_notification[]
 
 
 }
@@ -53,7 +54,7 @@ model Statu{
   statu_user_ticket         Statu_user_ticket[]
   statu_conversation_ticket      Statu_conversation_ticket[]
   statu_message_conversation     Statu_message_conversation[]
-
+  statu_user_notification        Statu_user_notification[]
 
 }
 
@@ -120,4 +121,23 @@ model Statu_message_conversation{
   Statu             Statu     @relation(fields: [statuId], references: [st_id])
   Message            Message    @relation(fields: [messageId], references: [id])
   Conversation      Conversation    @relation(fields: [conversationId], references: [id])
+}
+
+
+model Notification{
+  id                Int       @id @default(autoincrement())
+  contenu            String
+  statu_user_notification   Statu_user_notification[]
+
+}
+
+model Statu_user_notification{
+  id                 Int                  @id @default(autoincrement())
+  userId             Int
+  notificationId     Int
+  statuId            Int
+  date               DateTime             @default(now())
+  User               User                 @relation(fields: [userId], references: [id])
+  Notification       Notification         @relation(fields: [notificationId], references: [id])
+  Statu              Statu                @relation(fields: [statuId], references: [st_id])
 }

@@ -25,6 +25,7 @@ const authRouter=require('./routes/auth');
 const statuRouter=require('./routes/statu');
 const conversationRouter=require('./routes/conversation');
 const messageRouter = require('./routes/message')
+const notificationRouter = require('./routes/notification')
 
 
 //Socket
@@ -97,6 +98,7 @@ app.use('/auth', authRouter);
 app.use('/statu', statuRouter);
 app.use('/conversation',conversationRouter);
 app.use('/message',messageRouter);
+app.use('/notification',notificationRouter);
 
 
 

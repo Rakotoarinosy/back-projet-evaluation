@@ -118,3 +118,17 @@ Content-Type: application/json
 
 ###
 GET http://localhost:5000/message/13
+
+
+// notification
+###
+PUT  http://localhost:5000/notification/new
+Content-Type: application/json
+
+{
+    "userId": 1,
+    "contenu": "nouveau notification "
+} 
+
+###
+GET http://localhost:5000/notification/nbNonLu/1
