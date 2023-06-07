@@ -70,7 +70,7 @@ io.on('connection', socket => {
   socket.on('sendNotification', notification =>{   
     for (let i = 0; i < users.length; i++) {
       let user = users[i];
-      if (user.userRole === 1){
+      if (user.userRole === 3){
         io.to(user.socketId).emit('getNotification', 
         notification
     );

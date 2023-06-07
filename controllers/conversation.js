@@ -59,7 +59,6 @@ exports.newConversation = async (req, res, next) => {
       //MEttre a jour le ticket
       const user={}
       const allUser = await prisma.user.findMany({})
-
       allUser.map((allUser) => {
       user[allUser.id]= allUser.nom
     })
@@ -71,11 +70,11 @@ exports.newConversation = async (req, res, next) => {
         id: Number(req.body.ticketId)
       },
       data: {
-        adminId: user[req.body.admin]
+        adminId: req.body.admin
       }
     });
       
-      res.json(newStatuConversation)
+      res.json(updatedTicket)
       
     } catch (error) {
       next(error)

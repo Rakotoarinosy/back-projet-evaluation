@@ -83,6 +83,10 @@ exports.getAllNotification=async (req, res, next) => {
       where: {
         userId: userId
       },
+      orderBy: {
+        id: 'desc',
+      },
+
     });
 
 
@@ -129,6 +133,9 @@ exports.getNotificationNonLu=async (req, res, next) => {
         const allNotification = await prisma.statu_user_notification.findMany({
           where: {
             userId: userId
+          },
+          orderBy: {
+            id: 'desc',
           },
         });
     

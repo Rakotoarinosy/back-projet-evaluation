@@ -18,8 +18,8 @@ router.use( (req, res, next) => {
 
 router.get('/nonLu/:userId', notification_C.getNotificationNonLu)
 router.get('/nbNonLu/:userId', notification_C.getNombre)
-router.get('/setLu/:userId', notification_C.setLu)
 router.get('/:userId', notification_C.getAllNotification)
+router.patch('/setLu/:userId', notification_C.setLu)
 router.put('/new', notification_C.newNotification)
 
 
