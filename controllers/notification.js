@@ -130,7 +130,7 @@ exports.getNotificationNonLu=async (req, res, next) => {
         }
     
       
-        const allNotification = await prisma.statu_user_notification.findMany({
+        const allNotifications = await prisma.statu_user_notification.findMany({
           where: {
             userId: userId
           },
@@ -139,11 +139,15 @@ exports.getNotificationNonLu=async (req, res, next) => {
           },
         });
     
-    
+        
+        //prendre les 5 dernier notification
+        const allNotification = allNotifications
+        .filter((_, index) => index >= allNotifications.length - 5)
+        .sort((a, b) => b.id - a.id);
     
         for (const allNotificationItem of allNotification) {
 
-            if(allNotificationItem.statuId === 8){
+            // if(allNotificationItem.statuId === 8){
 
                 const notification = await prisma.notification.findUnique({
                     where: {
@@ -157,7 +161,7 @@ exports.getNotificationNonLu=async (req, res, next) => {
               };
               notificationGet.push(item);
 
-            }
+            // }
         
       }
       

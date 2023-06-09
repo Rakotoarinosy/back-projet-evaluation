@@ -51,11 +51,15 @@ io.on('connection', socket => {
 
 
   socket.on('sendMessage', async ({ newMessage }) => {
-    console.log('new message >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'+ newMessage)
       const receiver = users.find(user => user.userId === newMessage.receiverId);
       const sender = users.find(user => user.userId === newMessage.senderId);
       // const user = await Users.findById(senderId);
-    
+    console.log("******************************SENDER*********************************"+newMessage.senderId)
+    if(receiver){
+      console.log("******************************REVEIVER*********************************"+newMessaged)
+
+    }
+
       if (receiver) {
           io.to(receiver.socketId).to(sender.socketId).emit('getMessage', 
               newMessage
