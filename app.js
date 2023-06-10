@@ -56,7 +56,7 @@ io.on('connection', socket => {
       // const user = await Users.findById(senderId);
     console.log("******************************SENDER*********************************"+newMessage.senderId)
     if(receiver){
-      console.log("******************************REVEIVER*********************************"+newMessaged)
+      console.log("******************************RECEIVER*********************************"+receiver.socketId)
 
     }
 
@@ -71,12 +71,14 @@ io.on('connection', socket => {
           }
       });
 
-  socket.on('sendNotification', notification =>{   
-    
+  socket.on('sendNotification', notification =>{  
+    console.log("***********************************GOoooooooooooooo"+notification.receiverId)
+ 
     for (let i = 0; i < users.length; i++) {
       let user = users[i];
       if (user.userId === notification.receiverId){
-        
+        console.log("***********************************RECIEVER *******************"+user.socketId)
+
         io.to(user.socketId).emit('getNotification', 
         notification
     );
