@@ -72,9 +72,11 @@ io.on('connection', socket => {
       });
 
   socket.on('sendNotification', notification =>{   
+    
     for (let i = 0; i < users.length; i++) {
       let user = users[i];
-      if (user.userRole === 3){
+      if (user.userId === notification.receiverId){
+        
         io.to(user.socketId).emit('getNotification', 
         notification
     );

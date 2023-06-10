@@ -239,6 +239,9 @@ exports.getUserAdmin = async (req, res, next) => {
 
     const allUser = await prisma.user.findMany({
       include:{statu_user_role:true},
+      orderBy:{
+        id:'asc'
+      }
     })
 
     allUser.map((allUser) => {
