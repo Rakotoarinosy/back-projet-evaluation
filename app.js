@@ -87,8 +87,10 @@ io.on('connection', socket => {
 
   })
 
-  socket.on('disconnect', userId => {
-      users = users.filter(user => user.id !== userId);
+  socket.on('disconnecte', userId => {
+
+      users = users.filter(user => user.userId !== userId);
+      console.log(users)
       io.emit('getUsers', users);
   });
   // io.emit('getUsers', socket.userId);
