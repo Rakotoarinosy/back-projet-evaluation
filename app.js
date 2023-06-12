@@ -72,13 +72,12 @@ io.on('connection', socket => {
       });
 
   socket.on('sendNotification', notification =>{  
-    console.log("***********************************GOoooooooooooooo"+notification.receiverId)
- 
+    console.log("*********************************************************************************send to "+ notification.receiverId)
+
     for (let i = 0; i < users.length; i++) {
       let user = users[i];
-      if (user.userId === notification.receiverId){
-        console.log("***********************************RECIEVER *******************"+user.socketId)
 
+      if (user.userId === notification.receiverId){
         io.to(user.socketId).emit('getNotification', 
         notification
     );
@@ -86,6 +85,9 @@ io.on('connection', socket => {
     }
 
   })
+
+
+
 
   socket.on('disconnecte', userId => {
 
