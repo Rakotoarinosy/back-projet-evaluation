@@ -1,8 +1,9 @@
 const { PrismaClient } = require('@prisma/client')
 
 const { TicketError, RequestError } = require('../error/customError')
-
+const stringSimilarity = require('string-similarity');
 const prisma = new PrismaClient()
+
 
 
 const dateFormat= (date) =>{
@@ -13,6 +14,17 @@ const dateFormat= (date) =>{
   return strDate
 
 }
+
+function calculateWordSimilarity(text1, text2) {
+  const words1 = text1.toLowerCase().split(' ');
+  const words2 = text2.toLowerCase().split(' ');
+
+  const similarity = stringSimilarity.compareTwoStrings(words1.join(' '), words2.join(' '));
+
+  return similarity;
+}
+
+
 
 exports.getAllTickets=async (req, res, next) => {
 
@@ -109,7 +121,6 @@ exports.getCurrentTickets=async (req, res, next) => {
 
   try{
 
-  
     const allTicket = await prisma.ticket.findMany({
       include:{user:true,statu_user_ticket:true, statu_conversation_ticket:true},
       orderBy: {
@@ -126,7 +137,6 @@ exports.getCurrentTickets=async (req, res, next) => {
 
     allTicket.map((allTicket) => {
         
-
         let item = {
           id:allTicket.id,
           titre:allTicket.titre,
@@ -134,12 +144,12 @@ exports.getCurrentTickets=async (req, res, next) => {
           createdAt:dateFormat(allTicket.createdAt),
           userId:allTicket.userId,
           adminNom: user[allTicket.adminId],
+          propAdminId: allTicket.propAdminId,
           userNom: allTicket.user.nom,
           statuId:allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].statuId,
           statu_user_ticket: allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].id,
-          
+      
         };
-
 
         if (item.statuId === 4 || item.statuId ===5 || item.statuId ===7)
       {
@@ -189,13 +199,37 @@ exports.getTicket = async (req, res, next) => {
 
 exports.addTicket = async (req, res, next) => {
     try {
-      
+      let prositionAdmin=1
 
+
+      const allTicket = await prisma.ticket.findMany({
+        orderBy: {
+          id: 'desc',
+        },
+      })
+
+
+      for (let i = 0; i < allTicket.length; i++) {
+        const ticket = allTicket[i];
+        if (ticket.adminId !== -1) {
+          const text1 = ticket.titre;
+          const text2 = req.body.titre;
+          const wordSimilarity = calculateWordSimilarity(text1, text2);
+          console.log(text1 + " et " + text2);
+          console.log("************************* SIMILARITY **************" + wordSimilarity);
+          if (wordSimilarity > 0.5) {
+            prositionAdmin = ticket.adminId;
+            break; // Sortir de la boucle
+          }
+        }
+      }
+      
       const newTicket = {
         titre: req.body.titre,
         contenu: req.body.contenu,
         userId: req.body.userId,
-        statuId: 4
+        statuId: 4,
+        propAdminId: prositionAdmin
       }
 
       console.log(newTicket)

@@ -60,14 +60,14 @@ PUT http://localhost:5000/ticket/add
 Content-Type: application/json
 
 {
-    "titre": "testSuppression",
+    "titre": "ceci est un exemple",
     "contenu": "Ticket en resolu",
-    "userId": 1
+    "userId": 3
 } 
 
 
 ###
-DELETE http://localhost:5000/ticket/6
+DELETE http://localhost:5000/ticket/300
 
 
 ###

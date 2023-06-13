@@ -19,6 +19,7 @@ model Ticket {
   createdAt              DateTime                      @default(now())
   userId                 Int
   adminId                Int                           @default(-1)
+  propAdminId            Int                           @default(1)
   statuId                Int                           @default(4)
   user                   User                          @relation( fields: [userId], references: [id])
   statu                  Statu                         @relation( fields: [statuId], references: [st_id])

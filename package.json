@@ -20,7 +20,9 @@
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
-    "socket.io": "^4.6.2"
+    "natural": "^6.5.0",
+    "socket.io": "^4.6.2",
+    "string-similarity": "^4.0.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.22",

@@ -72,7 +72,7 @@ io.on('connection', socket => {
       });
 
   socket.on('sendNotification', notification =>{  
-    console.log("*********************************************************************************send to "+ notification.receiverId)
+    console.log("*********************************************************************************send to "+ notification.conversationId)
 
     for (let i = 0; i < users.length; i++) {
       let user = users[i];
