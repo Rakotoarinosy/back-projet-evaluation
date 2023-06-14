@@ -59,7 +59,7 @@ exports.login = async (req, res, next) => {
           throw new UserError(`L\'utilisateur n\'existe pas`, 0)
         }
         
-        const role=userRole[0].roleId
+        const role= userRole[userRole.length-1].roleId
         
         return res.json({
           access_token: token,

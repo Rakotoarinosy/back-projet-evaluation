@@ -1,7 +1,10 @@
 
 // USER //
 
-GET http://localhost:5000/user/userAdmin
+GET  http://localhost:5000/user
+
+###
+PATCH  http://localhost:5000/user/setRoleUser/6
 
 POST http://localhost:5000/user/userRole
 Content-Type: application/json
@@ -16,9 +19,9 @@ PUT  http://localhost:5000/user/register
 Content-Type: application/json
 
 {
-    "nom": "newuserd",
-    "email": "newTest@gmail.com",
-    "password": "newuser"
+    "nom": "newUser",
+    "email": "newUser@gmail.com",
+    "password": "newUser"
 } 
 
 ###

@@ -31,6 +31,11 @@ router.put('/register', user_C.addUser)
 
 router.patch('/edit/:id', user_C.updateUser)
 
+router.patch('/setRoleAdmin/:idUserRole', user_C.setRoleAdmin)
+
+router.patch('/setRoleUser/:idUserRole', user_C.setRoleUser)
+
+
 router.post('/userConnected', user_C.getUserConnected)
 
 router.post('/userRole', user_C.getUserRole)

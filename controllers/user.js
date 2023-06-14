@@ -9,14 +9,38 @@ const { UserError, RequestError } = require('../error/customError')
 
 const prisma = new PrismaClient()
 
+
+const role = {
+  setAdmin:1,
+  setUser:2,
+}
+
 exports.getAllUsers = async (req, res, next) => {
+
+    const users =[]
     try{   
 
       const user = await prisma.user.findMany({
         include:{ticket:true, statu_user_role:true},
+        orderBy: {
+          id: 'desc',
+        },
+      })
+
+      user.map((user) => {
+        
+        let item ={
+          id: user.id,
+          nom: user.nom,
+          email: user.email,
+          statuRoleId:user.statu_user_role[user.statu_user_role.length-1].id,
+          userRole: user.statu_user_role[user.statu_user_role.length-1].roleId
+
+        }
+        users.push(item)
       })
         
-      res.json({user})
+      res.json({users})
     } catch (error) {
       next(error)
     }
@@ -272,3 +296,73 @@ exports.getUserAdmin = async (req, res, next) => {
   }
 };
   
+
+exports.setRoleAdmin = async (req, res, next) => {
+  try {
+   const id = parseInt(req.params.idUserRole)
+
+  //tester le id
+  if(!id) {
+      return res.status(400).json({msg:"missing parameters"});
+  }
+
+  const last_statu_role = await prisma.statu_user_role.findUnique({
+    where: {
+      id: Number(id),      
+    },
+})
+
+  const new_statu_role={
+    userId:last_statu_role.userId,
+    roleId:role.setAdmin,
+    statuId:2
+
+  }
+
+  const statu_user_role = await prisma.statu_user_role.create({
+    data: new_statu_role,
+  })
+
+
+  res.json(statu_user_role)
+    
+  } catch (error) {
+    next(error)
+  } 
+};
+
+
+exports.setRoleUser = async (req, res, next) => {
+  try {
+   const id = parseInt(req.params.idUserRole)
+
+  //tester le id
+  if(!id) {
+      return res.status(400).json({msg:"missing parameters"});
+  }
+
+  const last_statu_role = await prisma.statu_user_role.findUnique({
+    where: {
+      id: Number(id),      
+    },
+})
+
+  const new_statu_role={
+    userId:last_statu_role.userId,
+    roleId:role.setUser,
+    statuId: 2
+  }
+
+
+
+  const statu_user_role = await prisma.statu_user_role.create({
+    data: new_statu_role,
+  })
+
+
+  res.json(statu_user_role)
+    
+  } catch (error) {
+    next(error)
+  } 
+};
