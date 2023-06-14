@@ -29,13 +29,20 @@ function calculateWordSimilarity(text1, text2) {
 exports.getAllTickets=async (req, res, next) => {
 
     const ticket =[]
-
+    const user={}
+    user[-1]="none"
     try{
       const allTicket = await prisma.ticket.findMany({
         include:{user:true,statu_user_ticket:true},
         orderBy: {
           id: 'desc',
         },
+      })
+
+      const allUser = await prisma.user.findMany({})
+
+      allUser.map((allUser) => {
+          user[allUser.id]= allUser.nom
       })
 
       allTicket.map((allTicket) => {
@@ -47,6 +54,7 @@ exports.getAllTickets=async (req, res, next) => {
             contenu:allTicket.contenu,
             createdAt:dateFormat(allTicket.createdAt),
             userId:allTicket.userId,
+            adminNom: user[allTicket.adminId],
             userNom: allTicket.user.nom,
             statuId:allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].statuId,
             statu_user_ticket: allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].id
@@ -151,7 +159,7 @@ exports.getCurrentTickets=async (req, res, next) => {
       
         };
 
-        if (item.statuId === 4 || item.statuId ===5 || item.statuId ===7)
+        if (item.statuId === 4 || item.statuId ===5 || item.statuId ===7 || item.statuId ===10)
       {
         ticket.push(item);
       }

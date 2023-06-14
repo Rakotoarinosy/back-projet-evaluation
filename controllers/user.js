@@ -37,7 +37,10 @@ exports.getAllUsers = async (req, res, next) => {
           userRole: user.statu_user_role[user.statu_user_role.length-1].roleId
 
         }
-        users.push(item)
+
+        if(item.userRole !== 3){
+          users.push(item)
+        }
       })
         
       res.json({users})
@@ -352,8 +355,6 @@ exports.setRoleUser = async (req, res, next) => {
     roleId:role.setUser,
     statuId: 2
   }
-
-
 
   const statu_user_role = await prisma.statu_user_role.create({
     data: new_statu_role,

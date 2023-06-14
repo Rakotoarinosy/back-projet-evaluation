@@ -17,10 +17,11 @@ router.use( (req, res, next) => {
 
 
 
-router.get('/supprimer/:id', statu_C.supprimer)
-router.get('/enCours/:id', statu_C.enCours)
-router.get('/enAttente/:id', statu_C.enAttente)
-router.get('/cloturer/:id', statu_C.cloturer)
+router.patch('/supprimer/:id', statu_C.supprimer)
+router.patch('/enCours/:id', statu_C.enCours)
+router.patch('/enAttente/:id', statu_C.enAttente)
+router.patch('/cloturer/:id', statu_C.cloturer)
+router.patch('/noncloturer/:id', statu_C.nonCloturer)
 
 
 

@@ -4,7 +4,7 @@
 GET  http://localhost:5000/user
 
 ###
-PATCH  http://localhost:5000/user/setRoleUser/6
+PATCH  http://localhost:5000/user/setRoleUser/7
 
 POST http://localhost:5000/user/userRole
 Content-Type: application/json
@@ -50,7 +50,7 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:5000/ticket/current
+GET http://localhost:5000/ticket
 
 
 // update statu ticket
@@ -63,7 +63,7 @@ PUT http://localhost:5000/ticket/add
 Content-Type: application/json
 
 {
-    "titre": "ceci est un exemple",
+    "titre": "testa",
     "contenu": "Ticket en resolu",
     "userId": 3
 } 

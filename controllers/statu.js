@@ -11,7 +11,8 @@ const statu = {
   nouveau:4,
   enCours:5,
   resolu:6,
-  enAttente:7
+  enAttente:7,
+  nonResolu:10
 
 }
 
@@ -50,7 +51,7 @@ exports.supprimer = async (req, res, next) => {
     })
 
     const updateTicket = {
-      "type": lastSchemaTicket.type,
+      "titre": lastSchemaTicket.titre,
       "contenu": lastSchemaTicket.contenu,
       "userId": lastSchemaTicket.userId,
       "statuId":statu.deleted
@@ -130,6 +131,68 @@ exports.supprimer = async (req, res, next) => {
       next(error)
     } 
   };
+
+
+
+  exports.nonCloturer = async (req, res, next) => {
+    try {
+     const id = parseInt(req.params.id)
+
+    //tester le id
+    if(!id) {
+        return res.status(400).json({msg:"missing parameters"});
+    }
+
+    const last_statu_ticket = await prisma.statu_user_ticket.findUnique({
+      where: {
+        id: Number(id),      
+      },
+  })
+
+    const new_statu_ticket={
+      userId:last_statu_ticket.userId,
+      ticketId:last_statu_ticket.ticketId,
+      statuId: statu.nonResolu
+
+    }
+
+    const statu_user_ticket = await prisma.statu_user_ticket.create({
+      data: new_statu_ticket,
+    })
+
+
+    //Modifier le status dans le ticket
+
+    const lastSchemaTicket = await prisma.ticket.findUnique({
+      where:{
+        id:last_statu_ticket.ticketId
+      }
+    })
+
+    const updateTicket = {
+      "titre": lastSchemaTicket.titre,
+      "contenu": lastSchemaTicket.contenu,
+      "userId": lastSchemaTicket.userId,
+      "statuId":statu.deleted,
+      "adminId":-1
+  } 
+
+    const ticket = await prisma.ticket.update({
+      data: updateTicket,
+      where:{
+        id: last_statu_ticket.ticketId
+      }
+    })
+
+
+    res.json(statu_user_ticket)
+      
+    } catch (error) {
+      next(error)
+    } 
+  };
+
+
 
 
   exports.enCours = async (req, res, next) => {
