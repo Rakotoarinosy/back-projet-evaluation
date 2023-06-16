@@ -247,7 +247,7 @@ exports.getNotificationNonLu=async (req, res, next) => {
 
               }
         
- 
+          res.json(allNotification)
         } catch (error) {
           next(error)
         }

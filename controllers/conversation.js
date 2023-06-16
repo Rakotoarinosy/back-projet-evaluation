@@ -86,6 +86,8 @@ exports.newConversation = async (req, res, next) => {
 exports.getConversation=async (req, res, next) => {
 
   const conversation =[]
+  //creer const idTicket = [] pour stocker l'id et prendre le dernier conversation pour la resolution
+  const idTicket = []
   try{
 
     const userConnectId = parseInt(req.params.id)
@@ -116,6 +118,7 @@ exports.getConversation=async (req, res, next) => {
     });
 
 
+ 
     for (const allConversationItem of allConversation) {
         
       
@@ -147,6 +150,7 @@ exports.getConversation=async (req, res, next) => {
         id:allConversationItem.Ticket.id
       }
 
+
     })
            
 
@@ -160,7 +164,10 @@ exports.getConversation=async (req, res, next) => {
         receiverId:user.id,
         conversationId: allConversationItem.Conversation.id        
       };
-      conversation.push(item);
+        if (!idTicket.includes(allConversationItem.Ticket.id)) {
+        idTicket.push(allConversationItem.Ticket.id);
+        conversation.push(item);
+      }
     
   }
 
