@@ -35,10 +35,12 @@ router.patch('/setRoleAdmin/:idUserRole', user_C.setRoleAdmin)
 
 router.patch('/setRoleUser/:idUserRole', user_C.setRoleUser)
 
+router.patch('/deleteUser/:idUserRole', user_C.deleteUser)
 
 router.post('/userConnected', user_C.getUserConnected)
 
 router.post('/userRole', user_C.getUserRole)
+
 
 
 

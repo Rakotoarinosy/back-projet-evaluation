@@ -22,6 +22,7 @@ exports.login = async (req, res, next) => {
 
     // Recherche de l'utilisateur
       const user = await prisma.user.findMany({
+        include:{statu_user_role: true},
         where:{
           email: req.body.email
         }
@@ -30,6 +31,14 @@ exports.login = async (req, res, next) => {
       if (user.length === 0) {
         throw new AuthenticationError(' Ce compte n\'existe pas', 1)
       }
+
+    user.map((user) => {
+
+    let  statuUser = user.statu_user_role[user.statu_user_role.length-1].statuId
+    if(statuUser ===3){
+      throw new AuthenticationError(' Ce compte est supprimer', 2)
+    }
+    })
 
     // Comparer le mot de passe
       const match = await bcrypt.compare(req.body.password, user[0].password);

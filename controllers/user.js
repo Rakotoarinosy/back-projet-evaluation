@@ -34,11 +34,11 @@ exports.getAllUsers = async (req, res, next) => {
           nom: user.nom,
           email: user.email,
           statuRoleId:user.statu_user_role[user.statu_user_role.length-1].id,
-          userRole: user.statu_user_role[user.statu_user_role.length-1].roleId
-
+          userRole: user.statu_user_role[user.statu_user_role.length-1].roleId,
+          statuUser:user.statu_user_role[user.statu_user_role.length-1].statuId
         }
 
-        if(item.userRole !== 3){
+        if(item.userRole !== 3 && item.statuUser !==3){
           users.push(item)
         }
       })
@@ -367,3 +367,38 @@ exports.setRoleUser = async (req, res, next) => {
     next(error)
   } 
 };
+
+
+exports.deleteUser = async (req, res, next) => {
+  try {
+   const id = parseInt(req.params.idUserRole)
+
+  //tester le id
+  if(!id) {
+      return res.status(400).json({msg:"missing parameters"});
+  }
+
+  const last_statu_role = await prisma.statu_user_role.findUnique({
+    where: {
+      id: Number(id),      
+    },
+})
+
+  const new_statu_role={
+    userId:last_statu_role.userId,
+    roleId: last_statu_role.roleId,
+    statuId: 3
+  }
+
+  const statu_user_role = await prisma.statu_user_role.create({
+    data: new_statu_role,
+  })
+
+
+  res.json(statu_user_role)
+    
+  } catch (error) {
+    next(error)
+  } 
+};
+
