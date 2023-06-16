@@ -15,6 +15,18 @@ const role = {
   setUser:2,
 }
 
+const statu = {
+  created:1,
+  updated:2,
+  deleted:3,
+  nouveau:4,
+  enCours:5,
+  resolu:6,
+  enAttente:7,
+  nonResolu:10
+
+}
+
 exports.getAllUsers = async (req, res, next) => {
 
     const users =[]
@@ -322,6 +334,9 @@ exports.setRoleAdmin = async (req, res, next) => {
 
   }
 
+  nonCloturer(last_statu_role.userId, res, next)
+
+
   const statu_user_role = await prisma.statu_user_role.create({
     data: new_statu_role,
   })
@@ -355,6 +370,9 @@ exports.setRoleUser = async (req, res, next) => {
     roleId:role.setUser,
     statuId: 2
   }
+
+  nonCloturer(last_statu_role.userId, res, next)
+
 
   const statu_user_role = await prisma.statu_user_role.create({
     data: new_statu_role,
@@ -390,12 +408,87 @@ exports.deleteUser = async (req, res, next) => {
     statuId: 3
   }
 
+  nonCloturer(last_statu_role.userId, res, next)
+
   const statu_user_role = await prisma.statu_user_role.create({
     data: new_statu_role,
   })
 
 
   res.json(statu_user_role)
+    
+  } catch (error) {
+    next(error)
+  } 
+};
+
+
+const nonCloturer = async (req, res, next) => {
+
+
+  try {
+   const id = parseInt(req)
+
+  //tester le id
+  if(!id) {
+      return res.status(400).json({msg:"missing parameters"});
+  }
+
+  //prendre tous les tickets de l'utilisateur
+  const last_statu_ticket = await prisma.statu_user_ticket.findMany({
+    where: {
+      userId: Number(id),      
+    },
+})
+
+
+  last_statu_ticket.map(async (last_statu_ticket) => {
+
+  // si le ticket est en cours ou en attente
+  if(last_statu_ticket.statuId === 5 || last_statu_ticket.statuId === 7 || last_statu_ticket.statuId === 4)
+  {
+
+  
+
+  const new_statu_ticket={
+    userId:last_statu_ticket.userId,
+    ticketId:last_statu_ticket.ticketId,
+    statuId: statu.deleted
+
+  }
+
+  const statu_user_ticket = await prisma.statu_user_ticket.create({
+    data: new_statu_ticket,
+  })
+
+
+  //Modifier le status dans le ticket
+
+  const lastSchemaTicket = await prisma.ticket.findUnique({
+    where:{
+      id:last_statu_ticket.ticketId
+    }
+  })
+
+  const updateTicket = {
+    "titre": lastSchemaTicket.titre,
+    "contenu": lastSchemaTicket.contenu,
+    "userId": lastSchemaTicket.userId,
+    "statuId":statu.deleted,
+    "adminId":-1
+} 
+
+  const ticket = await prisma.ticket.update({
+    data: updateTicket,
+    where:{
+      id: last_statu_ticket.ticketId
+    }
+  })
+
+  }
+
+  })
+
     
   } catch (error) {
     next(error)
