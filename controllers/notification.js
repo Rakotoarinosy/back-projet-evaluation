@@ -109,12 +109,15 @@ exports.getAllNotification=async (req, res, next) => {
     
   }
   
-    //retourner allMessage pour plus de comprehension
+    //retourner allMessage 
     res.json(notificationGet)
   } catch (error) {
     next(error)
   }
 };
+
+
+
 
 
 

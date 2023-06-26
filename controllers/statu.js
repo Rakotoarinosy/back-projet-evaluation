@@ -143,6 +143,7 @@ exports.supprimer = async (req, res, next) => {
         return res.status(400).json({msg:"missing parameters"});
     }
 
+    
     const last_statu_ticket = await prisma.statu_user_ticket.findUnique({
       where: {
         id: Number(id),      

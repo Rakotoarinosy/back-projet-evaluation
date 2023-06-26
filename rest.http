@@ -1,10 +1,10 @@
 
 // USER //
 
-GET  http://localhost:5000/user
+GET  http://localhost:5000/user/deleteUser/30
 
 ###
-PATCH  http://localhost:5000/user/setRoleUser/7
+PATCH  http://localhost:5000/user/deleteUser/30
 
 POST http://localhost:5000/user/userRole
 Content-Type: application/json
@@ -50,7 +50,7 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:5000/ticket
+GET http://localhost:5000/ticket/current
 
 
 // update statu ticket
@@ -129,8 +129,8 @@ PUT  http://localhost:5000/notification/new
 Content-Type: application/json
 
 {
-    "userId": 1,
-    "contenu": "user none a creer un ticket"
+    "userId": 3,
+    "contenu": "test notification"
 } 
 
 ###
@@ -138,7 +138,22 @@ GET http://localhost:5000/notification/1
 
 
 ###
-GET http://localhost:5000/notification/NonLu/1
+GET http://localhost:5000/notification/NonLu/3
 
 ###
-PATCH  http://localhost:5000/notification/setLu/1
+PATCH  http://localhost:5000/notification/setLu/3
+
+
+
+//dashboard
+###
+GET http://localhost:5000/dashboard/statAll
+
+###
+GET http://localhost:5000/dashboard/statLast
+
+###
+GET http://localhost:5000/dashboard/statUser
+
+###
+GET http://localhost:5000/dashboard/statCurrent

@@ -150,10 +150,8 @@ exports.getConversation=async (req, res, next) => {
         id:allConversationItem.Ticket.id
       }
 
-
     })
            
-
       let item = {
         id:allConversationItem.id,
         ticketTitre:allConversationItem.Ticket.titre,

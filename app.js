@@ -26,6 +26,7 @@ const statuRouter=require('./routes/statu');
 const conversationRouter=require('./routes/conversation');
 const messageRouter = require('./routes/message')
 const notificationRouter = require('./routes/notification')
+const dashboardRouter = require('./routes/dashboard')
 
 
 //Socket
@@ -54,9 +55,7 @@ io.on('connection', socket => {
       const receiver = users.find(user => user.userId === newMessage.receiverId);
       const sender = users.find(user => user.userId === newMessage.senderId);
       // const user = await Users.findById(senderId);
-    console.log("******************************SENDER*********************************"+newMessage.senderId)
     if(receiver){
-      console.log("******************************RECEIVER*********************************"+receiver.socketId)
 
     }
 
@@ -72,7 +71,6 @@ io.on('connection', socket => {
       });
 
   socket.on('sendNotification', notification =>{  
-    console.log("*********************************************************************************send to "+ notification.conversationId)
 
     for (let i = 0; i < users.length; i++) {
       let user = users[i];
@@ -111,6 +109,8 @@ app.use('/statu', statuRouter);
 app.use('/conversation',conversationRouter);
 app.use('/message',messageRouter);
 app.use('/notification',notificationRouter);
+app.use('/dashboard',dashboardRouter);
+
 
 
 

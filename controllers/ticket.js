@@ -225,7 +225,7 @@ exports.addTicket = async (req, res, next) => {
           const wordSimilarity = calculateWordSimilarity(text1, text2);
           console.log(text1 + " et " + text2);
           console.log("************************* SIMILARITY **************" + wordSimilarity);
-          if (wordSimilarity > 0.5) {
+          if (wordSimilarity > 0.4) {
             prositionAdmin = ticket.adminId;
             break; // Sortir de la boucle
           }
