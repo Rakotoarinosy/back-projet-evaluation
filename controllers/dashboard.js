@@ -20,7 +20,7 @@ const dateFormat= (date) =>{
 exports.getStatLast = async (req, res, next) => {
     try {
         const currentDate = new Date(); // Date actuelle
-        const fiveDaysAgo = subDays(currentDate, 5); // Date d'il y a 5 jours
+        const fiveDaysAgo = subDays(currentDate, 30); // Date d'il y a 5 jours
         
         const allStat = await prisma.statu_user_ticket.findMany({
             where: {
@@ -29,9 +29,7 @@ exports.getStatLast = async (req, res, next) => {
                     lte: endOfDay(currentDate) // Heure de fin de la journée actuelle
                 }
             },
-            orderBy: {
-                date: 'desc'
-            },
+           
         });
 
         const result = allStat.reduce((acc, stat) => {
@@ -61,7 +59,21 @@ exports.getStatLast = async (req, res, next) => {
             return acc;
         }, []);
 
-        res.json(result);
+        let response = {
+            date:[],
+            nouveauCount:[],
+            resoluCount:[],
+            nonResoluCount:[]
+        }
+
+        result.map((res)=>{
+            response.date.push(dateFormat(res.date))
+            response.nouveauCount.push(res.nouveauCount)
+            response.resoluCount.push(res.resoluCount)
+            response.nonResoluCount.push(res.nonResoluCount)
+        })
+
+        res.json(response);
     } catch (error) {
         next(error);
     }
@@ -76,10 +88,6 @@ exports.getStatUser = async (req, res, next) => {
                 adminId: {
                     not: -1
                 }
-            },
-
-            orderBy: {
-                id: 'desc'
             },
         });
 
@@ -112,7 +120,7 @@ exports.getStatUser = async (req, res, next) => {
                     user: user.nom,
                     resoluCount: stat.statuId === 6 ? 1 : 0,
                     nouveauCount: stat.statuId === 5 || stat.statuId ===7 ? 1 : 0,
-                    nonResoluCount: stat.statuId === 6 ? -1 : 0 
+                    nonResoluCount: stat.statuId === 5 || stat.statuId === 7 ? 1 : 0,
                 };
                 acc.push(newEntry);
             }
@@ -120,7 +128,20 @@ exports.getStatUser = async (req, res, next) => {
             return acc;
         }, []);
 
-        res.json(result);
+        let response = {
+            tech:[],
+            assigneCount:[],
+            resoluCount:[],
+            enCoursCount:[]
+        }
+
+        result.map((res)=>{
+            response.tech.push(res.user)
+            response.assigneCount.push(res.nouveauCount)
+            response.resoluCount.push(res.resoluCount)
+            response.enCoursCount.push(res.nonResoluCount)
+        })
+        res.json(response);
     } catch (error) {
         next(error);
     }
