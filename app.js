@@ -27,6 +27,7 @@ const conversationRouter=require('./routes/conversation');
 const messageRouter = require('./routes/message')
 const notificationRouter = require('./routes/notification')
 const dashboardRouter = require('./routes/dashboard')
+const solutionRouter = require('./routes/solution')
 
 
 //Socket
@@ -110,6 +111,8 @@ app.use('/conversation',conversationRouter);
 app.use('/message',messageRouter);
 app.use('/notification',notificationRouter);
 app.use('/dashboard',dashboardRouter);
+app.use('/solution',solutionRouter);
+
 
 
 

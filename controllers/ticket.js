@@ -45,10 +45,25 @@ exports.getAllTickets=async (req, res, next) => {
           user[allUser.id]= allUser.nom
       })
 
-      allTicket.map((allTicket) => {
+      await Promise.all(
+      allTicket.map(async (allTicket) => {
           
-                
-          let item = {
+        let solution;
+        
+        const dataSolution = await prisma.ticketSolution.findMany({
+            include:{solution:true},
+            where:{
+              ticketId:allTicket.id
+            }
+          })
+
+        if(dataSolution.length !== 0){
+          solution = dataSolution[0]?.solution?.contenu;
+        }else {
+          solution = "aucune"
+        }
+                        
+        let item = {
             id:allTicket.id,
             titre:allTicket.titre,
             contenu:allTicket.contenu,
@@ -57,11 +72,14 @@ exports.getAllTickets=async (req, res, next) => {
             adminNom: user[allTicket.adminId],
             userNom: allTicket.user.nom,
             statuId:allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].statuId,
-            statu_user_ticket: allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].id
+            statu_user_ticket: allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].id,
+            solution:solution
           };
-          ticket.push(item);
+
+        console.log(ticket)
+        ticket.push(item);
         
-      })
+      }))
 
       res.json({ticket})
     } catch (error) {
@@ -95,9 +113,24 @@ exports.getMyTickets=async (req, res, next) => {
       },
     })    
 
-
-    allTicket.map((allTicket) => {
+    await Promise.all(
+      allTicket.map(async (allTicket) => {
+          
+        let solution;
         
+        const dataSolution = await prisma.ticketSolution.findMany({
+            include:{solution:true},
+            where:{
+              ticketId:allTicket.id
+            }
+          })
+
+        if(dataSolution.length !== 0){
+          solution = dataSolution[0]?.solution?.contenu;
+        }else {
+          solution = "aucune"
+        }
+                        
       
         let item = {
           id:allTicket.id,
@@ -106,11 +139,12 @@ exports.getMyTickets=async (req, res, next) => {
           createdAt:dateFormat(allTicket.createdAt),
           userId:allTicket.userId,
           statuId:allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].statuId,
-          statu_user_ticket: allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].id
+          statu_user_ticket: allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].id,
+          solution:solution
         };
         ticket.push(item);
       
-    })
+    }))
 
     res.json({ticket})
   } catch (error) {

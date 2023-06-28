@@ -174,7 +174,7 @@ exports.supprimer = async (req, res, next) => {
       "titre": lastSchemaTicket.titre,
       "contenu": lastSchemaTicket.contenu,
       "userId": lastSchemaTicket.userId,
-      "statuId":statu.deleted,
+      "statuId":statu.nonResolu,
       "adminId":-1
   } 
 

@@ -51,7 +51,7 @@ exports.getStatLast = async (req, res, next) => {
                     date: stat.date,
                     resoluCount: stat.statuId === 6 ? 1 : 0,
                     nouveauCount: stat.statuId === 4 ? 1 : 0,
-                    nonResoluCount: stat.statuId === 6 ? -1 : 0 
+                    nonResoluCount: stat.statuId === 4 ? 1 : 0 
                 };
                 acc.push(newEntry);
             }
@@ -84,11 +84,16 @@ exports.getStatLast = async (req, res, next) => {
 exports.getStatUser = async (req, res, next) => {
     try { 
         const allStat = await prisma.ticket.findMany({
+            orderBy:{
+                id:'desc'
+            },
+
             where: {
                 adminId: {
                     not: -1
                 }
             },
+           
         });
 
         const result = await allStat.reduce(async (accPromise, stat) => {
@@ -215,6 +220,7 @@ exports.getStatAll = async (req, res, next) => {
         {
             
             nbTicket++
+            console.log(ticket.statuId)
 
             if(actifId.includes(ticket.statuId) ){
                 nbActif++

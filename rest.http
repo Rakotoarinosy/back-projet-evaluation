@@ -50,7 +50,7 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:5000/ticket/current
+GET http://localhost:5000/ticket
 
 
 // update statu ticket
@@ -156,3 +156,20 @@ GET http://localhost:5000/dashboard/statUser
 
 ###
 GET http://localhost:5000/dashboard/statCurrent
+
+
+
+///SOlution
+
+###
+PUT http://localhost:5000/solution/add
+Content-Type: application/json
+
+{
+    "contenu": " reactualiser la page",
+    "ticketId": 4
+} 
+
+
+###
+GET http://localhost:5000/ticket

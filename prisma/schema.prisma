@@ -10,135 +10,138 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 model Ticket {
-  id                     Int                           @id @default(autoincrement())
-  titre                  String                        @default("Aucun titre")
-  contenu                String
-  createdAt              DateTime                      @default(now())
-  userId                 Int
-  adminId                Int                           @default(-1)
-  propAdminId            Int                           @default(1)
-  statuId                Int                           @default(4)
-  user                   User                          @relation( fields: [userId], references: [id])
-  statu                  Statu                         @relation( fields: [statuId], references: [st_id])
+  id                        Int                         @id @default(autoincrement())
+  titre                     String                      @default("Aucun titre")
+  contenu                   String
+  createdAt                 DateTime                    @default(now())
+  userId                    Int
+  adminId                   Int                         @default(-1)
+  propAdminId               Int                         @default(1)
+  statuId                   Int                         @default(4)
+  user                      User                        @relation(fields: [userId], references: [id])
+  statu                     Statu                       @relation(fields: [statuId], references: [st_id])
+  statu_user_ticket         Statu_user_ticket[]
+  statu_conversation_ticket Statu_conversation_ticket[]
+  ticket_solution TicketSolution[]
+
+}
+
+model User {
+  id                      Int                       @id @default(autoincrement())
+  nom                     String
+  email                   String
+  password                String
+  ticket                  Ticket[]
+  statu_user_role         Statu_user_role[]
   statu_user_ticket       Statu_user_ticket[]
+  statu_user_notification Statu_user_notification[]
+}
+
+model Role {
+  id              Int               @id @default(autoincrement())
+  nom             String
+  statu_user_role Statu_user_role[]
+}
+
+model Statu {
+  st_id                      Int                          @id @default(autoincrement())
+  st_libelle                 String
+  role                       Statu_user_role[]
+  ticket                     Ticket[]
+  statu_user_ticket          Statu_user_ticket[]
   statu_conversation_ticket  Statu_conversation_ticket[]
-}
-
-
-model User{
-  id                Int       @id @default(autoincrement())
-  nom               String  
-  email             String
-  password          String
-  ticket            Ticket[]                           
-  statu_user_role          Statu_user_role[]
-  statu_user_ticket         Statu_user_ticket[]
-  statu_user_notification   Statu_user_notification[]
-
-
-}
-
-model Role{
-  id                Int       @id @default(autoincrement())
-  nom               String
-  statu_user_role          Statu_user_role[]
-}
-
-model Statu{
-  st_id             Int       @id @default(autoincrement())
-  st_libelle        String
-  role              Statu_user_role[]  
-  ticket             Ticket[]  
-  statu_user_ticket         Statu_user_ticket[]
-  statu_conversation_ticket      Statu_conversation_ticket[]
-  statu_message_conversation     Statu_message_conversation[]
-  statu_user_notification        Statu_user_notification[]
-
+  statu_message_conversation Statu_message_conversation[]
+  statu_user_notification    Statu_user_notification[]
 }
 
 model Statu_user_role {
-  id                Int       @id @default(autoincrement())
-  userId            Int
-  roleId            Int
-  statuId           Int
-  date              DateTime  @default(now())
-  user              User      @relation(fields: [userId], references: [id])
-  Role              Role      @relation(fields: [roleId], references: [id])
-  Statu             Statu     @relation(fields: [statuId], references: [st_id])
-
+  id      Int      @id @default(autoincrement())
+  userId  Int
+  roleId  Int
+  statuId Int
+  date    DateTime @default(now())
+  user    User     @relation(fields: [userId], references: [id])
+  Role    Role     @relation(fields: [roleId], references: [id])
+  Statu   Statu    @relation(fields: [statuId], references: [st_id])
 }
-
 
 model Statu_user_ticket {
-  id                Int        @id @default(autoincrement())
-  userId            Int
-  ticketId          Int
-  statuId           Int
-  date              DateTime  @default(now())
-  user              User      @relation(fields: [userId], references: [id])
-  Ticket            Ticket    @relation(fields: [ticketId], references: [id])
-  Statu             Statu     @relation(fields: [statuId], references: [st_id])
+  id       Int      @id @default(autoincrement())
+  userId   Int
+  ticketId Int
+  statuId  Int
+  date     DateTime @default(now())
+  user     User     @relation(fields: [userId], references: [id])
+  Ticket   Ticket   @relation(fields: [ticketId], references: [id])
+  Statu    Statu    @relation(fields: [statuId], references: [st_id])
 }
 
-
-model Conversation{
-  id                Int       @id @default(autoincrement())
-  membre              Int[]
-  statu_conversation_ticket      Statu_conversation_ticket[]
-  statu_message_conversation     Statu_message_conversation[]
-
+model Conversation {
+  id                         Int                          @id @default(autoincrement())
+  membre                     Int[]
+  statu_conversation_ticket  Statu_conversation_ticket[]
+  statu_message_conversation Statu_message_conversation[]
 }
 
-model Statu_conversation_ticket{
-  id                Int       @id @default(autoincrement())
-  statuId           Int
-  ticketId          Int
-  conversationId    Int
-  date              DateTime  @default(now())
-  Statu             Statu     @relation(fields: [statuId], references: [st_id])
-  Ticket            Ticket    @relation(fields: [ticketId], references: [id])
-  Conversation      Conversation    @relation(fields: [conversationId], references: [id])
-
+model Statu_conversation_ticket {
+  id             Int          @id @default(autoincrement())
+  statuId        Int
+  ticketId       Int
+  conversationId Int
+  date           DateTime     @default(now())
+  Statu          Statu        @relation(fields: [statuId], references: [st_id])
+  Ticket         Ticket       @relation(fields: [ticketId], references: [id])
+  Conversation   Conversation @relation(fields: [conversationId], references: [id])
 }
 
 model Message {
-  id                Int       @id @default(autoincrement())
-  senderId          Int
-  message           String
-  statu_message_conversation     Statu_message_conversation[]
-
+  id                         Int                          @id @default(autoincrement())
+  senderId                   Int
+  message                    String
+  statu_message_conversation Statu_message_conversation[]
 }
 
-
-model Statu_message_conversation{
-  id                Int       @id @default(autoincrement())
-  statuId           Int
-  messageId         Int
-  conversationId    Int
-  date              DateTime  @default(now())
-  Statu             Statu     @relation(fields: [statuId], references: [st_id])
-  Message            Message    @relation(fields: [messageId], references: [id])
-  Conversation      Conversation    @relation(fields: [conversationId], references: [id])
+model Statu_message_conversation {
+  id             Int          @id @default(autoincrement())
+  statuId        Int
+  messageId      Int
+  conversationId Int
+  date           DateTime     @default(now())
+  Statu          Statu        @relation(fields: [statuId], references: [st_id])
+  Message        Message      @relation(fields: [messageId], references: [id])
+  Conversation   Conversation @relation(fields: [conversationId], references: [id])
 }
 
-
-model Notification{
-  id                Int       @id @default(autoincrement())
-  contenu            String
-  statu_user_notification   Statu_user_notification[]
-
+model Notification {
+  id                      Int                       @id @default(autoincrement())
+  contenu                 String
+  statu_user_notification Statu_user_notification[]
 }
 
-model Statu_user_notification{
-  id                 Int                  @id @default(autoincrement())
-  userId             Int
-  notificationId     Int
-  statuId            Int
-  date               DateTime             @default(now())
-  User               User                 @relation(fields: [userId], references: [id])
-  Notification       Notification         @relation(fields: [notificationId], references: [id])
-  Statu              Statu                @relation(fields: [statuId], references: [st_id])
+model Statu_user_notification {
+  id             Int          @id @default(autoincrement())
+  userId         Int
+  notificationId Int
+  statuId        Int
+  date           DateTime     @default(now())
+  User           User         @relation(fields: [userId], references: [id])
+  Notification   Notification @relation(fields: [notificationId], references: [id])
+  Statu          Statu        @relation(fields: [statuId], references: [st_id])
+}
+
+model Solution {
+  id              Int              @id @default(autoincrement())
+  contenu         String
+  ticket_solution TicketSolution[]
+}
+
+model TicketSolution {
+  id         Int      @id @default(autoincrement())
+  ticketId   Int
+  solutionId Int
+  date       DateTime @default(now())
+  solution   Solution @relation(fields: [solutionId], references: [id])
+  ticket     Ticket @relation(fields: [ticketId], references: [id])
+
 }

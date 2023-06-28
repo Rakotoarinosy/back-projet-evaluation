@@ -154,6 +154,7 @@ exports.getConversation=async (req, res, next) => {
            
       let item = {
         id:allConversationItem.id,
+        ticketId:allConversationItem.Ticket.id,
         ticketTitre:allConversationItem.Ticket.titre,
         ticketContenu:allConversationItem.Ticket.contenu,
         statuId: allConversationItem.Ticket.statuId,
