@@ -99,9 +99,9 @@ exports.getStatUser = async (req, res, next) => {
             if (existingAdmin !== -1) {
                 // La date existe déjà dans le tableau des résultats, mettre à jour les compteurs
                 if (stat.statuId === 6) {
+                    acc[existingAdmin].nouveauCount++;
                     acc[existingAdmin].resoluCount++;
-                    acc[existingAdmin].nonResoluCount--;
-                } else if (stat.statuId === 5 || stat.statuId ===7) {
+                } else if (stat.statuId === 5 || stat.statuId ===7 ) {
                     acc[existingAdmin].nouveauCount++;
                     acc[existingAdmin].nonResoluCount++;
                 } 
@@ -119,7 +119,7 @@ exports.getStatUser = async (req, res, next) => {
                     adminId: stat.adminId,
                     user: user.nom,
                     resoluCount: stat.statuId === 6 ? 1 : 0,
-                    nouveauCount: stat.statuId === 5 || stat.statuId ===7 ? 1 : 0,
+                    nouveauCount: stat.statuId === 5 || stat.statuId ===7 || stat.statuId === 6 ? 1 : 0,
                     nonResoluCount: stat.statuId === 5 || stat.statuId === 7 ? 1 : 0,
                 };
                 acc.push(newEntry);

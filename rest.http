@@ -144,7 +144,6 @@ GET http://localhost:5000/notification/NonLu/3
 PATCH  http://localhost:5000/notification/setLu/3
 
 
-
 //dashboard
 ###
 GET http://localhost:5000/dashboard/statAll
