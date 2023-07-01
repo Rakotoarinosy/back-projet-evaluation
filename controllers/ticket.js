@@ -156,14 +156,14 @@ exports.getMyTickets=async (req, res, next) => {
 exports.getCurrentTickets=async (req, res, next) => {
 
 
-  const ticket =[]
+  const repTicket =[]
   const user={}
   user[-1]="none"
 
   try{
 
     const allTicket = await prisma.ticket.findMany({
-      include:{user:true,statu_user_ticket:true, statu_conversation_ticket:true},
+      include:{user:true,statu_user_ticket:true, statu_conversation_ticket:true,ticket_image:true},
       orderBy: {
         id: 'desc',
       },
@@ -171,13 +171,36 @@ exports.getCurrentTickets=async (req, res, next) => {
 
     const allUser = await prisma.user.findMany({})
 
+    
+    
     allUser.map((allUser) => {
         user[allUser.id]= allUser.nom
     })
 
-
-    allTicket.map((allTicket) => {
+    await Promise.all(
+    allTicket.map(async (allTicket) => {
         
+        let imageNom="image"
+
+
+        if(allTicket.ticket_image.length !== 0){
+          
+          const image = await prisma.image.findUnique({
+            where:{
+              id: allTicket.ticket_image[allTicket.ticket_image.length-1].imageId
+            }
+          })  
+
+          imageNom = image.nom
+          
+        } else {
+        
+          console.log(allTicket.ticket_image.length)
+
+          imageNom = "aucune"
+        }
+        
+
         let item = {
           id:allTicket.id,
           titre:allTicket.titre,
@@ -189,17 +212,18 @@ exports.getCurrentTickets=async (req, res, next) => {
           userNom: allTicket.user.nom,
           statuId:allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].statuId,
           statu_user_ticket: allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].id,
+          nomImage: imageNom
       
         };
 
         if (item.statuId === 4 || item.statuId ===5 || item.statuId ===7 || item.statuId ===10)
       {
-        ticket.push(item);
+        repTicket.push(item);
       }
     
-    })
+    }))
 
-
+    let ticket =repTicket.sort((a, b) => b.id - a.id);
 
     res.json({ticket})
   } catch (error) {
@@ -240,7 +264,7 @@ exports.getTicket = async (req, res, next) => {
 
 exports.addTicket =  async (req, res, next) => {
   
-  console.log('GOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO'+req.body.titre)
+  console.log('GOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO'+req.body.nomImage)
   
 
     try {
@@ -298,6 +322,31 @@ exports.addTicket =  async (req, res, next) => {
       });
 
       const lastId = idTicket?.id || 0; // Si la table est vide, retourne 0 comme dernière ID
+
+      
+      if(req.body.nomImage !== undefined){
+            //Prendre l'id de l'image ajouter
+            const image = await prisma.image.findFirst({
+              select: {
+                id: true,
+              },
+              orderBy: {
+                id: 'desc',
+              },
+            });
+
+            const imageId = image?.id || 0; // Si la table est vide, retourne 0 comme dernière ID
+            //Ajouter image
+            await prisma.ticketImage.create({
+              data:{
+                ticketId: lastId,
+                imageId: imageId
+              }
+            })
+      }
+    
+
+     
 
       //Ajouter status
       const newStatu_user_ticket = {

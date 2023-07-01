@@ -15,8 +15,23 @@ const fileStorageEngine = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "../Front/src/assets"); //important this is a direct path fron our current file to storage location
   },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "--" + file.originalname);
+  filename: async (req, file, cb) => {
+    const fileName = Date.now() + "--" + file.originalname;
+    
+    try {
+      // Code pour enregistrer le nom de fichier dans la base de données avec Prisma
+      await prisma.image.create({
+        data: {
+          nom: fileName,
+        },
+      });
+      
+      console.log('Nom de fichier enregistré avec succès dans la base de données');
+    } catch (error) {
+      console.error('Erreur lors de l\'enregistrement du fichier dans la base de données :', error);
+    }
+
+    cb(null, fileName);
   },
 });
 

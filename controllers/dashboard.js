@@ -220,7 +220,6 @@ exports.getStatAll = async (req, res, next) => {
         {
             
             nbTicket++
-            console.log(ticket.statuId)
 
             if(actifId.includes(ticket.statuId) ){
                 nbActif++
