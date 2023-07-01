@@ -1,9 +1,7 @@
 const { PrismaClient } = require('@prisma/client')
-
 const { TicketError, RequestError } = require('../error/customError')
 const stringSimilarity = require('string-similarity');
 const prisma = new PrismaClient()
-
 
 
 const dateFormat= (date) =>{
@@ -23,6 +21,7 @@ function calculateWordSimilarity(text1, text2) {
 
   return similarity;
 }
+
 
 
 
@@ -239,8 +238,13 @@ exports.getTicket = async (req, res, next) => {
 
 
 
-exports.addTicket = async (req, res, next) => {
+exports.addTicket =  async (req, res, next) => {
+  
+  console.log('GOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO'+req.body.titre)
+  
+
     try {
+
       let prositionAdmin=1
 
 
@@ -257,8 +261,8 @@ exports.addTicket = async (req, res, next) => {
           const text1 = ticket.titre;
           const text2 = req.body.titre;
           const wordSimilarity = calculateWordSimilarity(text1, text2);
-          console.log(text1 + " et " + text2);
-          console.log("************************* SIMILARITY **************" + wordSimilarity);
+          // console.log(text1 + " et " + text2);
+          // console.log("************************* SIMILARITY **************" + wordSimilarity);
           if (wordSimilarity > 0.4) {
             prositionAdmin = ticket.adminId;
             break; // Sortir de la boucle
@@ -269,7 +273,7 @@ exports.addTicket = async (req, res, next) => {
       const newTicket = {
         titre: req.body.titre,
         contenu: req.body.contenu,
-        userId: req.body.userId,
+        userId: parseInt(req.body.userId),
         statuId: 4,
         propAdminId: prositionAdmin
       }
@@ -280,7 +284,7 @@ exports.addTicket = async (req, res, next) => {
 
       const ticket = await prisma.ticket.create({
         data: newTicket,
-      })
+      }).catch((err) => console.log(err))
       
     
       //Prendre l'id du ticket ajouter
@@ -301,7 +305,7 @@ exports.addTicket = async (req, res, next) => {
         ticketId: lastId,
         statuId: 4
     }
-
+  
     const newRole = await prisma.statu_user_ticket.create({
       data: newStatu_user_ticket,
     })
@@ -311,7 +315,8 @@ exports.addTicket = async (req, res, next) => {
     } catch (error) {
       next(error)
     }  
-
+  
+  
 };
 
 
