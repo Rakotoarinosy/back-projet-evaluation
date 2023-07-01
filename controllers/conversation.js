@@ -145,12 +145,34 @@ exports.getConversation=async (req, res, next) => {
 
 
       const allTicket = await prisma.ticket.findUnique({
-      include:{user:true,statu_user_ticket:true},
+      include:{user:true,statu_user_ticket:true,ticket_image:true},
       where:{
         id:allConversationItem.Ticket.id
       }
 
     })
+
+        let imageNom="image"
+
+
+        if(allTicket.ticket_image.length !== 0){
+          
+          const image = await prisma.image.findUnique({
+            where:{
+              id: allTicket.ticket_image[allTicket.ticket_image.length-1].imageId
+            }
+          })  
+
+          imageNom = image.nom
+          
+        } else {
+        
+          console.log(allTicket.ticket_image.length)
+
+          imageNom = "aucune"
+        }
+
+
            
       let item = {
         id:allConversationItem.id,
@@ -161,8 +183,11 @@ exports.getConversation=async (req, res, next) => {
         statu_user_ticket:allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].id,
         receiverNom: user.nom,
         receiverId:user.id,
-        conversationId: allConversationItem.Conversation.id        
+        conversationId: allConversationItem.Conversation.id,
+        nomImage: imageNom   
       };
+
+      console.log('------------------------------------------- item = '+ item.nomImage )
         if (!idTicket.includes(allConversationItem.Ticket.id)) {
         idTicket.push(allConversationItem.Ticket.id);
         conversation.push(item);
