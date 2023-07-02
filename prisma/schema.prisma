@@ -25,8 +25,7 @@ model Ticket {
   statu_conversation_ticket Statu_conversation_ticket[]
   ticket_solution TicketSolution[]
   ticket_image TicketImage[]
-
-
+  ticket_observation TicketObservation[]
 }
 
 model User {
@@ -140,6 +139,16 @@ model Solution {
   ticket_solution TicketSolution[]
 }
 
+
+model Observation {
+  id              Int              @id @default(autoincrement())
+  type            String
+  contenu         String
+  ticket_observation TicketObservation[]
+}
+
+
+
 model TicketSolution {
   id         Int      @id @default(autoincrement())
   ticketId   Int
@@ -149,6 +158,19 @@ model TicketSolution {
   ticket     Ticket @relation(fields: [ticketId], references: [id])
 
 }
+
+
+model TicketObservation {
+  id         Int      @id @default(autoincrement())
+  ticketId   Int
+  observationId Int
+  date       DateTime @default(now())
+  observation   Observation @relation(fields: [observationId], references: [id])
+  ticket     Ticket @relation(fields: [ticketId], references: [id])
+
+}
+
+
 
 
 model Image {

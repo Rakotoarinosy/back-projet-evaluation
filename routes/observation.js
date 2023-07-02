@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 
 const router = require('express').Router();
 
-const solution_C = require('../controllers/solution')
+const solution_C = require('../controllers/observation')
 const { PrismaClient } = require('@prisma/client')
 
 
@@ -18,7 +18,7 @@ router.use( (req, res, next) => {
 
 
 
-router.put('/add', solution_C.addSolution)
+router.put('/add', solution_C.addObservation)
 
 
 module.exports = router;

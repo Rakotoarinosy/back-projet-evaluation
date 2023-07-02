@@ -27,7 +27,7 @@ function calculateWordSimilarity(text1, text2) {
 
 exports.getAllTickets=async (req, res, next) => {
 
-    const ticket =[]
+    const repTicket =[]
     const user={}
     user[-1]="none"
     try{
@@ -47,19 +47,26 @@ exports.getAllTickets=async (req, res, next) => {
       await Promise.all(
       allTicket.map(async (allTicket) => {
           
-        let solution;
+        let observation;
+        let observationType
         
-        const dataSolution = await prisma.ticketSolution.findMany({
-            include:{solution:true},
+        const dataObservation = await prisma.ticketObservation.findMany({
+            include:{observation:true},
             where:{
               ticketId:allTicket.id
+            },
+            orderBy:{
+              id: 'desc'
             }
+
           })
 
-        if(dataSolution.length !== 0){
-          solution = dataSolution[0]?.solution?.contenu;
+        if(dataObservation.length !== 0){
+          observation = dataObservation[0]?.observation?.contenu;
+          observationType = dataObservation[0]?.observation?.type
         }else {
-          solution = "aucune"
+          observation = "aucune"
+          observationType = "aucune"
         }
                         
         let item = {
@@ -72,13 +79,16 @@ exports.getAllTickets=async (req, res, next) => {
             userNom: allTicket.user.nom,
             statuId:allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].statuId,
             statu_user_ticket: allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].id,
-            solution:solution
+            observation:observation,
+            observationType: observationType
           };
 
-        console.log(ticket)
-        ticket.push(item);
+          repTicket.push(item);
         
       }))
+
+      let ticket =repTicket.sort((a, b) => b.id - a.id);
+
 
       res.json({ticket})
     } catch (error) {
@@ -90,7 +100,7 @@ exports.getAllTickets=async (req, res, next) => {
 exports.getMyTickets=async (req, res, next) => {
 
   
-  const ticket =[]
+  const repTicket =[]
 
   try{
 
@@ -115,21 +125,28 @@ exports.getMyTickets=async (req, res, next) => {
     await Promise.all(
       allTicket.map(async (allTicket) => {
           
-        let solution;
+        let observation;
+        let observationType
         
-        const dataSolution = await prisma.ticketSolution.findMany({
-            include:{solution:true},
+        const dataObservation = await prisma.ticketObservation.findMany({
+            include:{observation:true},
             where:{
               ticketId:allTicket.id
+            },
+            orderBy:{
+              id: 'desc'
             }
+
           })
 
-        if(dataSolution.length !== 0){
-          solution = dataSolution[0]?.solution?.contenu;
+        if(dataObservation.length !== 0){
+          observation = dataObservation[0]?.observation?.contenu;
+          observationType = dataObservation[0]?.observation?.type
         }else {
-          solution = "aucune"
+          observation = "aucune"
+          observationType = "aucune"
         }
-                        
+
       
         let item = {
           id:allTicket.id,
@@ -139,11 +156,14 @@ exports.getMyTickets=async (req, res, next) => {
           userId:allTicket.userId,
           statuId:allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].statuId,
           statu_user_ticket: allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].id,
-          solution:solution
+          observation: observation,
+          observationType: observationType
         };
-        ticket.push(item);
+        repTicket.push(item);
       
     }))
+
+    let ticket =repTicket.sort((a, b) => b.id - a.id);
 
     res.json({ticket})
   } catch (error) {
@@ -201,6 +221,28 @@ exports.getCurrentTickets=async (req, res, next) => {
         }
         
 
+        let observation;
+        let observationType
+        
+        const dataObservation = await prisma.ticketObservation.findMany({
+            include:{observation:true},
+            where:{
+              ticketId:allTicket.id
+            },
+            orderBy:{
+              id: 'desc'
+            }
+          })
+
+        if(dataObservation.length !== 0){
+          observation = dataObservation[0]?.observation?.contenu;
+          observationType = dataObservation[0]?.observation?.type
+        }else {
+          observation = "aucune"
+          observationType = "aucune"
+        }
+
+
         let item = {
           id:allTicket.id,
           titre:allTicket.titre,
@@ -212,7 +254,9 @@ exports.getCurrentTickets=async (req, res, next) => {
           userNom: allTicket.user.nom,
           statuId:allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].statuId,
           statu_user_ticket: allTicket.statu_user_ticket[allTicket.statu_user_ticket.length-1].id,
-          nomImage: imageNom
+          nomImage: imageNom,
+          observation:observation,
+          observationType: observationType
       
         };
 
