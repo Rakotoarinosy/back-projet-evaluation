@@ -185,6 +185,29 @@ exports.supprimer = async (req, res, next) => {
       }
     })
 
+    const conversation = await prisma.statu_conversation_ticket.findMany({
+      where:{
+        ticketId: last_statu_ticket.ticketId,
+      },
+      orderBy:{
+        id: 'desc'
+      }
+    })
+
+    console.log('///////////////////////////////////////////////////////////')
+    console.log(conversation[0])
+
+    const updateConversation = {
+      "id": conversation[0].id,
+      "statuId":5,
+      "ticketId": conversation[0].ticketId,
+  } 
+
+   await prisma.statu_conversation_ticket.update({
+    data: updateConversation,
+    where:{
+      id: conversation[0].id   }
+  })
 
     res.json(statu_user_ticket)
       

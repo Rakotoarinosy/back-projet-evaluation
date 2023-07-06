@@ -104,6 +104,7 @@ exports.getConversation=async (req, res, next) => {
         id: 'desc',
       },
       where: {
+        statuId:4,
         Ticket:{
           statuId: {
             in:[5,7],
@@ -114,6 +115,7 @@ exports.getConversation=async (req, res, next) => {
             has: userConnectId,
           },
         },
+
       },
     });
 
@@ -140,6 +142,24 @@ exports.getConversation=async (req, res, next) => {
         }
       })
 
+      //recuperation image de l'utilisateur
+
+      const userImage = await prisma.userImage.findMany({
+        include:{image:true},
+        where: {
+          userId: Number(user.id),
+        },
+
+      })
+
+      let imageProfile =""
+      if (userImage.length == 0) {
+          imageProfile ="avatar.png"
+      }else{
+       imageProfile= userImage[0].image.nom;
+      }
+
+
 
       //prendre le status du ticket dans statu_user_ticket
 
@@ -164,10 +184,8 @@ exports.getConversation=async (req, res, next) => {
           })  
 
           imageNom = image.nom
-          
+
         } else {
-        
-          console.log(allTicket.ticket_image.length)
 
           imageNom = "aucune"
         }
@@ -184,7 +202,8 @@ exports.getConversation=async (req, res, next) => {
         receiverNom: user.nom,
         receiverId:user.id,
         conversationId: allConversationItem.Conversation.id,
-        nomImage: imageNom   
+        nomImage: imageNom,
+        imageProfile: imageProfile   
       };
 
       console.log('------------------------------------------- item = '+ item.nomImage )

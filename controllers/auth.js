@@ -69,6 +69,24 @@ exports.login = async (req, res, next) => {
         }
         
         const role= userRole[userRole.length-1].roleId
+
+
+         //recuperation du role de l'utilisateur
+
+         const userImage = await prisma.userImage.findMany({
+          include:{image:true},
+          where: {
+            userId: Number(user[0].id),
+          },
+  
+        })
+  
+        let image =""
+        if (userImage.length == 0) {
+            image ="avatar.png"
+        }else{
+         image = userImage[0]?.image?.contenu;
+        }
         
         return res.json({
           access_token: token,
@@ -76,6 +94,7 @@ exports.login = async (req, res, next) => {
           nom: user[0].nom,
           email: user[0].nom,
           role: role,
+          image: image,
         })
       
       

@@ -215,8 +215,6 @@ exports.getCurrentTickets=async (req, res, next) => {
           
         } else {
         
-          console.log(allTicket.ticket_image.length)
-
           imageNom = "aucune"
         }
         

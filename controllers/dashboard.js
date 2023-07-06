@@ -35,7 +35,7 @@ exports.getStatLast = async (req, res, next) => {
         const result = allStat.reduce((acc, stat) => {
             const formattedDate = dateFormat(stat.date); // Formatage de la date sans l'heure
             const existingDateIndex = acc.findIndex(item => dateFormat(item.date)=== formattedDate);
-
+            
             if (existingDateIndex !== -1) {
                 // La date existe déjà dans le tableau des résultats, mettre à jour les compteurs
                 if (stat.statuId === 6) {
