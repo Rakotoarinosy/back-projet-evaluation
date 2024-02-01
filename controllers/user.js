@@ -33,7 +33,7 @@ exports.getAllUsers = async (req, res, next) => {
     try{   
 
       const user = await prisma.user.findMany({
-        include:{ticket:true, statu_user_role:true},
+        include:{ statu_user_role:true},
         orderBy: {
           id: 'desc',
         },

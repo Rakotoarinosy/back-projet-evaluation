@@ -8,6 +8,7 @@ const io = require('socket.io')(8080, {
       origin: 'http://localhost:3000',
   }
 });
+
 const checkTokenMiddleware = require('./jsonwebtoken/check')
 
 
@@ -29,73 +30,6 @@ const notificationRouter = require('./routes/notification')
 const dashboardRouter = require('./routes/dashboard')
 const observationRouter = require('./routes/observation')
 
-
-//Socket
-let users = [];
-
-io.on('connection', socket => {
-  console.log('User connected', socket.id);
-  
-  socket.on('addUser', ({ data }) => {
-    console.log('addUser');
-    const userIndex = users.findIndex(user => user.userId === data.userId);
-    
-    if (userIndex === -1) {
-      const newUser = { userId: data.userId, userRole: data.userRole, socketId: socket.id };
-      users.push(newUser);
-    } else {
-      users[userIndex].socketId = socket.id; // Mettre à jour l'ID du socket existant pour l'utilisateur
-    }
-
-    io.emit('getUsers', users);
-    console.log(users);
-  });
-
-
-  socket.on('sendMessage', async ({ newMessage }) => {
-      const receiver = users.find(user => user.userId === newMessage.receiverId);
-      const sender = users.find(user => user.userId === newMessage.senderId);
-      // const user = await Users.findById(senderId);
-    if(receiver){
-
-    }
-
-      if (receiver) {
-          io.to(receiver.socketId).to(sender.socketId).emit('getMessage', 
-              newMessage
-          );
-          }else {
-              io.to(sender.socketId).emit('getMessage', 
-                  newMessage
-              );
-          }
-      });
-
-  socket.on('sendNotification', notification =>{  
-
-    for (let i = 0; i < users.length; i++) {
-      let user = users[i];
-
-      if (user.userId === notification.receiverId){
-        io.to(user.socketId).emit('getNotification', 
-        notification
-    );
-      }
-    }
-
-  })
-
-
-
-
-  socket.on('disconnecte', userId => {
-
-      users = users.filter(user => user.userId !== userId);
-      console.log(users)
-      io.emit('getUsers', users);
-  });
-  // io.emit('getUsers', socket.userId);
-});
 
 
 

@@ -1,7 +1,7 @@
 
 // USER //
 
-GET  http://localhost:5000/user/deleteUser/30
+GET  http://localhost:5000/user/
 
 ###
 PATCH  http://localhost:5000/user/deleteUser/30
@@ -19,9 +19,9 @@ PUT  http://localhost:5000/user/register
 Content-Type: application/json
 
 {
-    "nom": "newUser",
-    "email": "newUser@gmail.com",
-    "password": "newUser"
+    "nom": "Etudiant",
+    "email": "etudiant@gmail.com",
+    "password": "etudiant"
 } 
 
 ###
@@ -40,8 +40,8 @@ POST http://localhost:5000/auth/login
 Content-Type: application/json
 
 {
-    "email": "rabe@gmail.com",
-    "password": "123456"
+    "email": "etudiant@gmail.com",
+    "password": "etudiant"
 } 
 
 
