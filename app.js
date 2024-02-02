@@ -30,6 +30,7 @@ const notificationRouter = require('./routes/notification')
 const dashboardRouter = require('./routes/dashboard')
 const observationRouter = require('./routes/observation')
 const lyceeRouter = require('./routes/lycee')
+const classeRouter = require('./routes/classe')
 
 
 
@@ -48,6 +49,7 @@ app.use('/notification',notificationRouter);
 app.use('/dashboard',dashboardRouter);
 app.use('/observation',observationRouter);
 app.use('/lycee',lyceeRouter);
+app.use('/classe',classeRouter);
 
 
 
