@@ -1,8 +1,4 @@
 
-// USER //
-
-GET  http://localhost:5000/user/
-
 ###
 PATCH  http://localhost:5000/user/deleteUser/30
 
@@ -173,3 +169,20 @@ Content-Type: application/json
 
 ###
 GET http://localhost:5000/ticket
+
+
+//
+###
+PUT http://localhost:5000/lycee/add
+Content-Type: application/json
+
+{
+    "nomLycee": "LMA"
+} 
+
+
+
+// USER //
+###
+GET  http://localhost:5000/lycee
+

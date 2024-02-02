@@ -29,6 +29,7 @@ const messageRouter = require('./routes/message')
 const notificationRouter = require('./routes/notification')
 const dashboardRouter = require('./routes/dashboard')
 const observationRouter = require('./routes/observation')
+const lyceeRouter = require('./routes/lycee')
 
 
 
@@ -46,6 +47,7 @@ app.use('/message',messageRouter);
 app.use('/notification',notificationRouter);
 app.use('/dashboard',dashboardRouter);
 app.use('/observation',observationRouter);
+app.use('/lycee',lyceeRouter);
 
 
 

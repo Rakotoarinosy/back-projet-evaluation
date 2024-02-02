@@ -65,20 +65,21 @@ model Classe {
   id                 Int                 @id @default(autoincrement())
   nomClasse          String
   user_classe_lycee       UserClasseLycee[]
-  prof_classe         ProfClasse[]
+  prof_classe_lycee         ProfClasseLycee[]
 }
 
 model Lycee {
   id                 Int                 @id @default(autoincrement())
   nomLycee          String
   user_classe_lycee       UserClasseLycee[]
+  prof_classe_lycee       ProfClasseLycee[]
 
 }
 
 model Prof {
   id                 Int                 @id @default(autoincrement())
   nomProf          String
-  prof_classe         ProfClasse[]
+  prof_classe_lycee         ProfClasseLycee[]
 
 }
 
@@ -103,12 +104,14 @@ model UserClasseLycee {
   lycee              Lycee               @relation(fields: [lyceeId],references: [id])
 }
 
-model ProfClasse {
+model ProfClasseLycee {
   id                Int                 @id @default(autoincrement())
   profId            Int
   classeId           Int
+  lyceeId           Int
   prof             Prof              @relation(fields: [profId], references: [id])
   classe             Classe              @relation(fields: [classeId], references: [id])
+  lycee             Lycee              @relation(fields: [lyceeId], references: [id])
 
 }
 
