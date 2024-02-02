@@ -3,7 +3,7 @@ const createError = require('http-errors');
 const morgan = require('morgan');
 require('dotenv').config();
 const cors = require('cors')
-const io = require('socket.io')(8080, {
+const io = require('socket.io')(8081, {
   cors: {
       origin: 'http://localhost:3000',
   }
@@ -31,6 +31,7 @@ const dashboardRouter = require('./routes/dashboard')
 const observationRouter = require('./routes/observation')
 const lyceeRouter = require('./routes/lycee')
 const classeRouter = require('./routes/classe')
+const profRouter = require('./routes/professeur')
 
 
 
@@ -50,6 +51,7 @@ app.use('/dashboard',dashboardRouter);
 app.use('/observation',observationRouter);
 app.use('/lycee',lyceeRouter);
 app.use('/classe',classeRouter);
+app.use('/prof',profRouter);
 
 
 
