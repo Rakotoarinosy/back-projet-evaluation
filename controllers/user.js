@@ -120,8 +120,8 @@ exports.addUser = async (req, res, next) => {
     
   //Ajouter l'utilisateur
   const newUser = await prisma.user.create({
-       data:dataNewUser,
-      })
+    data:dataNewUser,
+  })
 
   //Prendre l'id de l'user ajouter
   const result = await prisma.user.findFirst({
@@ -495,3 +495,37 @@ const nonCloturer = async (req, res, next) => {
   } 
 };
 
+
+exports.getUserClasse = async (req, res, next) => {
+  try {
+
+    const idUser = parseInt(req.body.idUser)
+
+  // Vérification si le champ id est présent et cohérent
+  if (!idUser) {
+    throw new RequestError('Missing parameter')
+  }
+
+ 
+  const userClasse = await prisma.userClasseLycee.findFirst({
+    where: {
+      userId: idUser
+    }
+  });
+
+  if (!userClasse) {
+    return res.status(404).json({ message: 'User classe not found' });
+  }
+
+  const { classeId, lyceeId } = userClasse;
+
+  const rep = {
+    classeId: classeId,
+    lyceeId: lyceeId
+  };
+    
+    res.json(rep)
+  } catch (error) {
+    return res.status(500).json({ message: 'Database Error' })
+  }  
+};
