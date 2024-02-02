@@ -20,9 +20,10 @@ exports.addProf = async (req, res, next) => {
     try {
 
       const newProf= {
-        nomProf: req.body.nomClasse,
+        nomProf: req.body.nomProf,
       }
 
+      console.log(newProf)
       //Ajouter lycee
 
       const prof = await prisma.prof.create({
@@ -48,7 +49,7 @@ exports.addProf = async (req, res, next) => {
         lyceeId: req.body.lyceeId
       }
 
-      const profClasseLycee = await prisma.prof_classe_lycee.create({
+      const profClasseLycee = await prisma.profClasseLycee.create({
       data: newProfClasseLycee,
       })
 
@@ -113,16 +114,23 @@ exports.getProfClasse = async (req, res, next) => {
     throw new RequestError('Missing parameter')
   }
 
-  
-  const classe = await prisma.prof_classe_lycee.findMany({
+ 
+  const classe = await prisma.profClasseLycee.findMany({
       include:{ prof:true},
       where: {
       classeId: Number(idClasse),
       lyceeId: Number(idLycee)
       },
     })
+
+    const rep = []
+    classe.forEach(element => {
+      rep.push(element.prof)
+    });
+
+
     
-    res.json(classe)
+    res.json(rep)
   } catch (error) {
     return res.status(500).json({ message: 'Database Error' })
   }  
