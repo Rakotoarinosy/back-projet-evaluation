@@ -80,14 +80,30 @@ exports.login = async (req, res, next) => {
           },
   
         })
-  
         let image =""
         if (userImage.length == 0) {
             image ="avatar.png"
         }else{
          image = userImage[0]?.image?.nom;
         }
-        
+
+        const userClasse = await prisma.userClasseLycee.findFirst({
+          where: {
+            userId: Number(user[0].id)
+          }
+        });
+      
+        if (!userClasse) {
+          return res.status(404).json({ message: 'User classe not found' });
+        }
+      
+        const { classeId, lyceeId } = userClasse;
+      
+        const rep = {
+          classeId: classeId,
+          lyceeId: lyceeId
+        };
+
         return res.json({
           access_token: token,
           id: user[0].id,
@@ -95,6 +111,7 @@ exports.login = async (req, res, next) => {
           email: user[0].nom,
           role: role,
           image: image,
+          rep
         })
       
       
