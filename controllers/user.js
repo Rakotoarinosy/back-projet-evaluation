@@ -499,7 +499,7 @@ const nonCloturer = async (req, res, next) => {
 exports.getUserClasse = async (req, res, next) => {
   try {
 
-    const idUser = parseInt(req.body.idUser)
+  const idUser = parseInt(req.body.idUser)
 
   // Vérification si le champ id est présent et cohérent
   if (!idUser) {
