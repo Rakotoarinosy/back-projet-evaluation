@@ -3,8 +3,6 @@ const bcrypt = require('bcrypt');
 const router = require('express').Router();
 
 const user_C = require('../controllers/user')
-
-
 const { PrismaClient } = require('@prisma/client')
 
 
@@ -40,6 +38,8 @@ router.patch('/deleteUser/:idUserRole', user_C.deleteUser)
 router.post('/userConnected', user_C.getUserConnected)
 
 router.post('/userRole', user_C.getUserRole)
+
+router.post('/userClasse', user_C.getUserClasse)
 
 
 
