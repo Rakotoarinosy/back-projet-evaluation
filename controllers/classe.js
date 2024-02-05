@@ -64,18 +64,38 @@ exports.getClasse = async (req, res, next) => {
 
 exports.getAllClasse = async (req, res, next) => {
 
-  try{   
+  try {
+    const page = parseInt(req.query.page) || 1; // Récupérer le numéro de la page depuis la requête
+    const limit = 5; // Définir la limite d'éléments par page
+
+    let whereClause = {}; // Condition de filtrage
+
+    // Vérifier si le filtre par ID est présent dans la requête
+    if (req.query.filterId) {
+      whereClause.id = parseInt(req.query.filterId, 10);
+    }
+
+    const totalClassesCount = await prisma.classe.count({ where: whereClause });
+
+
+    const totalPages = Math.ceil(totalClassesCount / limit); // Calculer le nombre total de pages
 
     const classes = await prisma.classe.findMany({
+      where: whereClause,
       orderBy: {
         id: 'desc',
       },
-    })
+      skip: (page - 1) * limit,
+      take: limit,
+    });
 
-
-      
-    res.json(classes)
+    // res.set('x-total-pages', totalPages);
+    res.json({
+      classes, 
+      totalPages
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
+
 };

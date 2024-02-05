@@ -16,9 +16,7 @@ const dateFormat= (date) =>{
 
 
 exports.addProf = async (req, res, next) => {
-
     try {
-
       const newProf= {
         nomProf: req.body.nomProf,
       }
